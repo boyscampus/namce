@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NAMCE - BOYS CAMPUS | Home</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --secondary: #0d9488;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      color: white;
+      padding: 1.5rem 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .header-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand img {
+      width: 65px;
+      height: 65px;
+      background: white;
+      padding: 4px;
+      border-radius: 50%;
+    }
+
+    .brand h1 { font-size: 1.4rem; }
+    .brand p { color: #93c5fd; font-size: 0.85rem; }
+
+    nav { display: flex; gap: 1rem; }
+    .nav-btn {
+      padding: 0.6rem 1.25rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-student { background: var(--secondary); color: white; }
+    .btn-student:hover { background: #0f766e; }
+
+    .btn-teacher { background: #3b82f6; color: white; }
+    .btn-teacher:hover { background: #2563eb; }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background: url('https://namce.org/wp-content/uploads/2021/03/slider1.jpg') center/cover no-repeat;
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      padding: 0 1rem;
+    }
+
+    .hero-content h2 { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .hero-content p { font-size: 1.1rem; color: #cbd5e1; margin-bottom: 1.5rem; }
+
+    .portal-options {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .portal-card-btn {
+      background: white;
+      color: var(--text);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .portal-card-btn:hover { transform: translateY(-3px); }
+
+    /* Info Section */
+    .container { max-width: 1100px; margin: 3rem auto; padding: 0 1rem; }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .info-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .info-card h3 { color: var(--primary); margin-bottom: 0.75rem; font-size: 1.3rem; }
+    .info-card p { color: #475569; line-height: 1.6; font-size: 0.95rem; }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #0f172a;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="header-container">
+      <div class="brand">
+        <img src="https://namce.org/wp-content/uploads/2021/03/namce-logo.png" alt="NAMCE Logo" onerror="this.src='https://via.placeholder.com/65?text=NAMCE'" />
+        <div>
+          <h1>NAMCE - BOYS CAMPUS</h1>
+          <p>Nazir Ajmal Memorial College of Education</p>
+        </div>
+      </div>
+      <nav>
+        <a href="student-login.html" class="nav-btn btn-student">Student Login</a>
+        <a href="teacher-login.html" class="nav-btn btn-teacher">Teacher Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h2>Academic & Cultural Digital Portal</h2>
+      <p>Official repository for Student and Faculty blogs, research articles, magazines, and literary works.</p>
+      <div class="portal-options">
+        <a href="student-login.html" class="portal-card-btn" style="border-left: 5px solid var(--secondary);">Enter Student Portal &rarr;</a>
+        <a href="teacher-login.html" class="portal-card-btn" style="border-left: 5px solid var(--primary);">Enter Faculty Portal &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About NAMCE Section -->
+  <div class="container">
+    <h2 style="text-align: center; color: var(--primary); font-size: 1.8rem;">About NAMCE Boys Campus</h2>
+    
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>Academic Excellence</h3>
+        <p>Nazir Ajmal Memorial College of Education (NAMCE) is dedicated to delivering high-caliber educational standards, fostering critical inquiry across Political Science, Sociology, English, and Teacher Training disciplines.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Departmental Structure</h3>
+        <p>Our campus supports structured 8-semester undergraduate and training degree paths. Students engage in continuous academic publishing, magazine editing, and digital content creation.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Faculty Leadership</h3>
+        <p>Our faculty guides students through research methodologies, cultural event curation, and regular peer-reviewed contributions accessible through the dedicated Teacher Portal.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; NAMCE - Boys Campus Portal. All Rights Reserved.
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Login - NAMCE</title>
+  <style>
+    body {
+      background-color: #f8fafc;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-box {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .login-box h2 {
+      color: #0d9488;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .login-box p {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 0.4rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: #0d9488;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1rem;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Student Portal Access</h2>
+    <p>Select your credentials to enter the publication area.</p>
+
+    <form action="student-dashboard.html">
+      <div class="form-group">
+        <label>Roll Number / Student ID</label>
+        <input type="text" placeholder="e.g. NAMCE-2026-042" required />
+      </div>
+
+      <div class="form-group">
+        <label>Department</label>
+        <select required>
+          <option value="Political Science">Political Science</option>
+          <option value="Sociology">Sociology</option>
+          <option value="English">English</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Semester</label>
+        <select required>
+          <option value="1st Semester">1st Semester</option>
+          <option value="2nd Semester">2nd Semester</option>
+          <option value="3rd Semester">3rd Semester</option>
+          <option value="4th Semester">4th Semester</option>
+          <option value="5th Semester">5th Semester</option>
+          <option value="6th Semester">6th Semester</option>
+          <option value="7th Semester">7th Semester</option>
+          <option value="8th Semester">8th Semester</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">Login to Portal</button>
+    </form>
+
+    <a href="index.html" class="back-link">&larr; Return to Home Page</a>
+  </div>
+
+</body>
+</html>
