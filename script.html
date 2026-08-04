@@ -1,0 +1,84 @@
+/* ==========================================================================
+   NAMCE Boys' Campus - Master JavaScript File (Updated & Enhanced)
+   ========================================================================== */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  // 1. Scroll-To-Top Button Functionality
+  const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+  if (scrollTopBtn) {
+    // Ensure hidden by default
+    scrollTopBtn.style.display = 'none';
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollTopBtn.style.display = 'flex';
+      } else {
+        scrollTopBtn.style.display = 'none';
+      }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
+
+  // 2. Active Navbar Link Highlighting
+  const currentLocation = window.location.pathname.split('/').pop() || 'index.html';
+  const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+  navLinks.forEach(link => {
+    const linkHref = link.getAttribute('href');
+    if (linkHref === currentLocation) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+
+  // 3. Contact Form Interactivity
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Thank you for contacting NAMCE Boys\' Campus. Your message has been received!');
+      contactForm.reset();
+    });
+  }
+
+  // 4. Student Portal Login Logic
+  const studentLoginForm = document.getElementById('studentLoginForm');
+  if (studentLoginForm) {
+    studentLoginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Optional: Add basic verification or direct redirect
+      console.log('Student login authenticated.');
+      window.location.href = 'student-dashboard.html';
+    });
+  }
+
+  // 5. Faculty Portal Login Logic
+  const teacherLoginForm = document.getElementById('teacherLoginForm');
+  if (teacherLoginForm) {
+    teacherLoginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      console.log('Faculty login authenticated.');
+      window.location.href = 'teacher-dashboard.html';
+    });
+  }
+
+  // 6. Admin Portal Login Logic
+  const adminLoginForm = document.getElementById('adminLoginForm');
+  if (adminLoginForm) {
+    adminLoginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      console.log('Admin login authenticated.');
+      window.location.href = 'admin-dashboard.html';
+    });
+  }
+
+});

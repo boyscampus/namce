@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - NAMCE BOYS' CAMPUS</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="fa-solid fa-university fa-2x" style="color: var(--primary-maroon);"></i>
+        <div class="brand-text">
+          <span class="brand-title">NAMCE BOYS' CAMPUS</span>
+          <span class="brand-subtitle">STUDENT PORTAL</span>
+        </div>
+      </a>
+      <div class="d-flex align-items-center">
+        <span class="me-3 fw-bold text-dark d-none d-sm-inline"><i class="fa-solid fa-user-graduate text-primary me-2"></i>Welcome, Student</span>
+        <button id="logoutBtn" class="btn btn-outline-danger btn-sm fw-bold"><i class="fa-solid fa-right-from-bracket me-1"></i> Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-4 mb-4">
+        
+        <!-- Welcome Card -->
+        <div class="col-lg-4">
+          <div class="glass-card p-4 border-start border-4 border-primary">
+            <div class="text-center mb-3">
+              <div class="bg-primary text-white rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                <i class="fa-solid fa-user-graduate fa-2x"></i>
+              </div>
+              <h5 class="fw-bold text-dark font-heading mb-0">Student Profile</h5>
+              <span class="badge bg-primary mt-1">B.A. Undergraduate</span>
+            </div>
+            <hr>
+            <p class="small text-muted mb-1"><strong>Institution:</strong> NAMCE Boys' Campus</p>
+            <p class="small text-muted mb-1"><strong>Affiliation:</strong> Gauhati University</p>
+            <p class="small text-muted mb-0"><strong>Location:</strong> Hojai, Assam</p>
+          </div>
+        </div>
+
+        <!-- Submission Form -->
+        <div class="col-lg-8">
+          <div class="glass-card p-4 p-md-5">
+            <h4 class="fw-bold text-dark font-heading mb-3"><i class="fa-solid fa-pen-nib text-primary me-2"></i>Submit Creative Work</h4>
+            <p class="text-muted small mb-4">Publish your original poems or articles. All submissions undergo administrative moderation before appearing on the Creative Corner board.</p>
+
+            <div id="submissionAlert" class="alert alert-success d-none" role="alert">
+              Submission successful! Your work has been sent for administrative review.
+            </div>
+
+            <form id="studentWorkForm">
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-bold small text-dark">Author Name</label>
+                  <input type="text" id="authorName" class="form-control" placeholder="Your full name" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold small text-dark">Category</label>
+                  <select id="workCategory" class="form-select" required>
+                    <option value="Poem">Poem</option>
+                    <option value="Article">Article / Essay</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-bold small text-dark">Title</label>
+                <input type="text" id="workTitle" class="form-control" placeholder="Title of your work" required>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold small text-dark">Content</label>
+                <textarea id="workContent" class="form-control" rows="5" placeholder="Write or paste your submission here..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary fw-bold px-4 py-2"><i class="fa-solid fa-paper-plane me-2"></i>Submit for Review</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container text-center text-muted small py-3">
+      &copy; Nazir Ajmal Memorial College of Education (Boys' Campus). All Rights Reserved.
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('studentWorkForm');
+      const alertBox = document.getElementById('submissionAlert');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      // Logout function
+      logoutBtn.addEventListener('click', () => {
+        window.location.href = 'student-login.html';
+      });
+
+      // Handle Form Submit
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const title = document.getElementById('workTitle').value;
+        const author = document.getElementById('authorName').value;
+        const category = document.getElementById('workCategory').value;
+        const content = document.getElementById('workContent').value;
+        const date = new Date().toISOString().split('T')[0];
+
+        const newSubmission = {
+          id: Date.now(),
+          title: title,
+          author: author,
+          role: "Student",
+          category: category,
+          status: "Pending",
+          date: date,
+          content: content
+        };
+
+        let submissions = JSON.parse(localStorage.getItem('namce_submissions')) || [];
+        submissions.push(newSubmission);
+        localStorage.setItem('namce_submissions', JSON.stringify(submissions));
+
+        form.reset();
+        alertBox.classList.remove('d-none');
+        setTimeout(() => alertBox.classList.add('d-none'), 4000);
+      });
+    });
+  </script>
+</body>
+</html>

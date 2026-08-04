@@ -3,25 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Faculty Portal Login - NAMCE BOYS' CAMPUS</title>
+  <title>Contact Us - NAMCE BOYS' CAMPUS</title>
   
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-light">
 
-  <!-- Top Contact Bar -->
+  <!-- Top Bar -->
   <div class="top-bar d-none d-md-block">
     <div class="container d-flex justify-content-between align-items-center">
       <div>
@@ -58,58 +51,87 @@
           <li class="nav-item"><a class="nav-link" href="notices.html">Notices</a></li>
           <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
           <li class="nav-item"><a class="nav-link" href="downloads.html">Downloads</a></li>
-          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Login Section -->
+  <!-- Banner Header -->
+  <section class="hero-section text-center py-5">
+    <div class="container py-3">
+      <h1 class="fw-bold text-white font-heading display-5">Contact Campus Administration</h1>
+      <p class="lead text-light mb-0">Get in Touch with Nazir Ajmal Memorial College of Education (Boys' Campus)</p>
+    </div>
+  </section>
+
+  <!-- Contact Form & Info Section -->
   <section class="py-5">
-    <div class="container py-4">
-      <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-          <div class="glass-card p-4 p-md-5 border-top border-4 border-danger">
-            <div class="text-center mb-4">
-              <div class="bg-danger text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-                <i class="fa-solid fa-chalkboard-user fa-2x"></i>
+    <div class="container">
+      <div class="row g-5">
+        
+        <div class="col-lg-5">
+          <div class="glass-card p-4 p-md-5 h-100">
+            <h3 class="fw-bold text-dark font-heading mb-4">Campus Info</h3>
+            
+            <div class="d-flex align-items-start mb-4">
+              <i class="fa-solid fa-location-dot fa-2x text-primary me-3 mt-1"></i>
+              <div>
+                <h6 class="fw-bold mb-1">Campus Location</h6>
+                <p class="text-muted small mb-0">Nazir Ajmal Memorial College of Education (Boys' Campus), Hojai, Assam - 782435</p>
               </div>
-              <h3 class="fw-bold font-heading text-dark">Faculty Portal Login</h3>
-              <p class="text-muted small">Access teacher publishing panel & academic records</p>
             </div>
 
-            <form id="teacherLoginForm">
-              <div class="mb-3">
-                <label class="form-label fw-bold text-dark">Faculty Email Username</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                  <input type="text" class="form-control" placeholder="e.g. namce.ap.tompokpsc@gmail.com" required>
-                </div>
+            <div class="d-flex align-items-start mb-4">
+              <i class="fa-solid fa-phone fa-2x text-success me-3 mt-1"></i>
+              <div>
+                <h6 class="fw-bold mb-1">Helpdesk Phone</h6>
+                <p class="text-muted small mb-0">+91 9387127176</p>
               </div>
+            </div>
 
-              <div class="mb-4">
-                <label class="form-label fw-bold text-dark">Password</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                  <input type="password" class="form-control" placeholder="Enter password" required>
-                </div>
+            <div class="d-flex align-items-start">
+              <i class="fa-solid fa-envelope fa-2x text-danger me-3 mt-1"></i>
+              <div>
+                <h6 class="fw-bold mb-1">Email Queries</h6>
+                <p class="text-muted small mb-0">boyscampusnamce@gmail.com</p>
               </div>
-
-              <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">Sign In to Faculty Portal</button>
-            </form>
-
-            <div class="mt-4 p-3 bg-light rounded border">
-              <p class="small text-muted mb-1 text-center"><strong>Teacher Login Credentials:</strong></p>
-              <ul class="small text-muted mb-0 ps-3">
-                <li><code>namce.ap.tompokpsc@gmail.com</code></li>
-                <li><code>krasinandas@gmail.com</code></li>
-                <li><code>namce.ap.amir.@gmail.com</code></li>
-                <li><code>namce.ap.bhaskar@gmail.com</code></li>
-              </ul>
-              <p class="small text-muted mt-2 mb-0 text-center">Password for all: <code>NAMCE@2014</code></p>
             </div>
           </div>
         </div>
+
+        <div class="col-lg-7">
+          <div class="glass-card p-4 p-md-5">
+            <h3 class="fw-bold text-dark font-heading mb-3">Send Inquiry Message</h3>
+            <p class="text-muted small mb-4">Fill out the form below to connect with institutional office personnel.</p>
+
+            <form id="contactForm">
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-bold small text-dark">Full Name</label>
+                  <input type="text" class="form-control" placeholder="Your name" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold small text-dark">Email Address</label>
+                  <input type="email" class="form-control" placeholder="Your email" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-bold small text-dark">Subject</label>
+                <input type="text" class="form-control" placeholder="Inquiry topic" required>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold small text-dark">Message</label>
+                <textarea class="form-control" rows="4" placeholder="Type your message here..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary fw-bold px-4 py-2">Submit Inquiry</button>
+            </form>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>

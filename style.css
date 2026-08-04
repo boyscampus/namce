@@ -1,0 +1,186 @@
+/* ==========================================================================
+   NAMCE Boys' Campus - Master Stylesheet
+   Color Palette: Deep Maroon & Warm Charcoal/Gold Accents
+   ========================================================================== */
+
+:root {
+  --primary-maroon: #800000;
+  --secondary-maroon: #5c0000;
+  --accent-gold: #c5a059;
+  --charcoal-dark: #2b2b2b;
+  --light-bg: #f8f9fa;
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* Global Styles */
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--charcoal-dark);
+  background-color: var(--light-bg);
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Top Bar */
+.top-bar {
+  background-color: var(--secondary-maroon);
+  color: #ffffff;
+  font-size: 0.85rem;
+  padding: 8px 0;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #ffffff;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+  padding: 12px 0;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--primary-maroon);
+  letter-spacing: 0.5px;
+}
+
+.brand-subtitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #666;
+  letter-spacing: 1px;
+}
+
+.navbar-nav .nav-link {
+  font-weight: 500;
+  color: var(--charcoal-dark) !important;
+  padding: 8px 16px !important;
+  transition: color 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: var(--primary-maroon) !important;
+  font-weight: 600;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, var(--secondary-maroon) 0%, var(--primary-maroon) 100%);
+  color: #ffffff;
+  padding: 80px 0;
+  box-shadow: inset 0 -10px 20px rgba(0,0,0,0.1);
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary-maroon);
+  border-color: var(--primary-maroon);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--secondary-maroon);
+  border-color: var(--secondary-maroon);
+}
+
+.btn-outline-primary {
+  color: var(--primary-maroon);
+  border-color: var(--primary-maroon);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-maroon);
+  border-color: var(--primary-maroon);
+  color: #ffffff;
+}
+
+/* Footer */
+footer {
+  background-color: var(--secondary-maroon);
+  color: #d1d1d1;
+  padding: 50px 0 20px 0;
+  margin-top: auto;
+}
+
+footer h5 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+footer ul li a {
+  color: #d1d1d1;
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 2.2;
+  transition: color 0.2s ease;
+}
+
+footer ul li a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Scroll To Top Button */
+#scrollTopBtn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 99;
+  background-color: var(--primary-maroon);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#scrollTopBtn:hover {
+  background-color: var(--secondary-maroon);
+  transform: scale(1.08);
+}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Faculty Portal Login - NAMCE BOYS' CAMPUS</title>
+  <title>Admin Portal Login - NAMCE BOYS' CAMPUS</title>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,44 +69,37 @@
     <div class="container py-4">
       <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
-          <div class="glass-card p-4 p-md-5 border-top border-4 border-danger">
+          <div class="glass-card p-4 p-md-5 border-top border-4 border-dark">
             <div class="text-center mb-4">
-              <div class="bg-danger text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-                <i class="fa-solid fa-chalkboard-user fa-2x"></i>
+              <div class="bg-dark text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                <i class="fa-solid fa-user-shield fa-2x"></i>
               </div>
-              <h3 class="fw-bold font-heading text-dark">Faculty Portal Login</h3>
-              <p class="text-muted small">Access teacher publishing panel & academic records</p>
+              <h3 class="fw-bold font-heading text-dark">Admin Authentication</h3>
+              <p class="text-muted small">Campus Moderation & Site Management Portal</p>
             </div>
 
-            <form id="teacherLoginForm">
+            <form id="adminLoginForm">
               <div class="mb-3">
-                <label class="form-label fw-bold text-dark">Faculty Email Username</label>
+                <label class="form-label fw-bold text-dark">Admin Username</label>
                 <div class="input-group">
-                  <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                  <input type="text" class="form-control" placeholder="e.g. namce.ap.tompokpsc@gmail.com" required>
+                  <span class="input-group-text"><i class="fa-solid fa-user-gear"></i></span>
+                  <input type="text" class="form-control" placeholder="Enter admin username" required>
                 </div>
               </div>
 
               <div class="mb-4">
                 <label class="form-label fw-bold text-dark">Password</label>
                 <div class="input-group">
-                  <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                  <input type="password" class="form-control" placeholder="Enter password" required>
+                  <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+                  <input type="password" class="form-control" placeholder="Enter admin password" required>
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">Sign In to Faculty Portal</button>
+              <button type="submit" class="btn btn-dark w-100 py-2 fw-bold">Authenticate & Open Panel</button>
             </form>
 
-            <div class="mt-4 p-3 bg-light rounded border">
-              <p class="small text-muted mb-1 text-center"><strong>Teacher Login Credentials:</strong></p>
-              <ul class="small text-muted mb-0 ps-3">
-                <li><code>namce.ap.tompokpsc@gmail.com</code></li>
-                <li><code>krasinandas@gmail.com</code></li>
-                <li><code>namce.ap.amir.@gmail.com</code></li>
-                <li><code>namce.ap.bhaskar@gmail.com</code></li>
-              </ul>
-              <p class="small text-muted mt-2 mb-0 text-center">Password for all: <code>NAMCE@2014</code></p>
+            <div class="mt-4 p-3 bg-light rounded border text-center">
+              <p class="small text-muted mb-0"><strong>Demo Admin Credentials:</strong><br>Username: <code>admin123</code> | Password: <code>admin123</code></p>
             </div>
           </div>
         </div>

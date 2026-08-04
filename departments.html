@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Faculty Portal Login - NAMCE BOYS' CAMPUS</title>
+  <title>Academic Departments - NAMCE BOYS' CAMPUS</title>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
 </head>
 <body class="bg-light">
 
-  <!-- Top Contact Bar -->
+  <!-- Top Contact & Info Bar -->
   <div class="top-bar d-none d-md-block">
     <div class="container d-flex justify-content-between align-items-center">
       <div>
@@ -35,7 +35,7 @@
     </div>
   </div>
 
-  <!-- Navigation Bar -->
+  <!-- Main Navigation Bar -->
   <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
       <a class="navbar-brand" href="index.html">
@@ -52,7 +52,7 @@
         <ul class="navbar-nav ms-auto align-items-center">
           <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="departments.html">Departments</a></li>
+          <li class="nav-item"><a class="nav-link active" href="departments.html">Departments</a></li>
           <li class="nav-item"><a class="nav-link" href="faculty.html">Faculty</a></li>
           <li class="nav-item"><a class="nav-link" href="creative-corner.html">Creative Corner</a></li>
           <li class="nav-item"><a class="nav-link" href="notices.html">Notices</a></li>
@@ -64,53 +64,70 @@
     </div>
   </nav>
 
-  <!-- Login Section -->
+  <!-- Banner Header -->
+  <section class="hero-section text-center py-5">
+    <div class="container py-3">
+      <h1 class="fw-bold text-white font-heading display-5">Academic Departments</h1>
+      <p class="lead text-light mb-0">Undergraduate Programs & Humanities Disciplines at NAMCE Boys' Campus</p>
+    </div>
+  </section>
+
+  <!-- Departments Section -->
   <section class="py-5">
-    <div class="container py-4">
-      <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-          <div class="glass-card p-4 p-md-5 border-top border-4 border-danger">
-            <div class="text-center mb-4">
-              <div class="bg-danger text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-                <i class="fa-solid fa-chalkboard-user fa-2x"></i>
-              </div>
-              <h3 class="fw-bold font-heading text-dark">Faculty Portal Login</h3>
-              <p class="text-muted small">Access teacher publishing panel & academic records</p>
+    <div class="container">
+      
+      <!-- Department 1: Political Science -->
+      <div class="glass-card p-4 p-md-5 mb-5 border-start border-5 border-primary">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-3">
+              <i class="fa-solid fa-landmark fa-2x text-primary me-3"></i>
+              <h2 class="fw-bold text-dark font-heading mb-0">Department of Political Science</h2>
             </div>
-
-            <form id="teacherLoginForm">
-              <div class="mb-3">
-                <label class="form-label fw-bold text-dark">Faculty Email Username</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                  <input type="text" class="form-control" placeholder="e.g. namce.ap.tompokpsc@gmail.com" required>
-                </div>
-              </div>
-
-              <div class="mb-4">
-                <label class="form-label fw-bold text-dark">Password</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                  <input type="password" class="form-control" placeholder="Enter password" required>
-                </div>
-              </div>
-
-              <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">Sign In to Faculty Portal</button>
-            </form>
-
-            <div class="mt-4 p-3 bg-light rounded border">
-              <p class="small text-muted mb-1 text-center"><strong>Teacher Login Credentials:</strong></p>
-              <ul class="small text-muted mb-0 ps-3">
-                <li><code>namce.ap.tompokpsc@gmail.com</code></li>
-                <li><code>krasinandas@gmail.com</code></li>
-                <li><code>namce.ap.amir.@gmail.com</code></li>
-                <li><code>namce.ap.bhaskar@gmail.com</code></li>
-              </ul>
-              <p class="small text-muted mt-2 mb-0 text-center">Password for all: <code>NAMCE@2014</code></p>
+            <p class="text-muted mb-3">The Department of Political Science offers comprehensive courses covering Political Theory, Indian Government and Politics, Public Administration, International Relations, and Comparative Politics under the Gauhati University syllabus.</p>
+            
+            <h5 class="fw-bold text-dark mb-2">Department Faculty:</h5>
+            <ul class="list-unstyled text-muted mb-0">
+              <li class="mb-1"><i class="fa-solid fa-user-check text-primary me-2"></i><strong>TOMPOK PHANJOUBAM</strong> — HOD / Assistant Professor</li>
+              <li class="mb-1"><i class="fa-solid fa-user-check text-primary me-2"></i><strong>K. RASIANANDA SINGHA</strong> — Assistant Professor</li>
+            </ul>
+          </div>
+          <div class="col-lg-4 text-center border-start-lg ps-lg-4">
+            <div class="bg-light p-3 rounded text-center">
+              <i class="fa-solid fa-graduation-cap fa-3x text-primary mb-2"></i>
+              <h5 class="fw-bold text-dark">Programs Offered</h5>
+              <span class="badge bg-primary px-3 py-2">B.A. Political Science (Honours & Regular)</span>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Department 2: English -->
+      <div class="glass-card p-4 p-md-5 mb-5 border-start border-5 border-danger">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-3">
+              <i class="fa-solid fa-book-open-reader fa-2x text-danger me-3"></i>
+              <h2 class="fw-bold text-dark font-heading mb-0">Department of English</h2>
+            </div>
+            <p class="text-muted mb-3">The Department of English focuses on British Literature, Indian Writing in English, Literary Criticism, Communication Skills, and Linguistics, encouraging critical thinking and creative analytical expression.</p>
+            
+            <h5 class="fw-bold text-dark mb-2">Department Faculty:</h5>
+            <ul class="list-unstyled text-muted mb-0">
+              <li class="mb-1"><i class="fa-solid fa-user-check text-danger me-2"></i><strong>AMIR HUSSAIN</strong> — Assistant Professor</li>
+              <li class="mb-1"><i class="fa-solid fa-user-check text-danger me-2"></i><strong>BHASKAR GOHAIN</strong> — Assistant Professor</li>
+            </ul>
+          </div>
+          <div class="col-lg-4 text-center border-start-lg ps-lg-4">
+            <div class="bg-light p-3 rounded text-center">
+              <i class="fa-solid fa-graduation-cap fa-3x text-danger mb-2"></i>
+              <h5 class="fw-bold text-dark">Programs Offered</h5>
+              <span class="badge bg-danger px-3 py-2">B.A. English (Honours & Regular)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -152,6 +169,9 @@
       </div>
     </div>
   </footer>
+
+  <!-- Scroll-To-Top Button -->
+  <button id="scrollTopBtn" title="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
