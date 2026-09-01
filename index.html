@@ -90,9 +90,6 @@
                     <button onclick="switchTab('history')" id="nav-history" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
                         <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> Attendance History
                     </button>
-                    <button onclick="switchTab('weekly')" id="nav-weekly" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
-                        <i class="fa-solid fa-envelope-circle-check w-5 text-center"></i> Weekly Reports
-                    </button>
                     <button onclick="switchTab('students')" id="nav-students" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
                         <i class="fa-solid fa-users w-5 text-center"></i> Students List
                     </button>
@@ -169,11 +166,11 @@
 
                 <!-- 2. DAILY ATTENDANCE TAB -->
                 <section id="tab-daily" class="tab-content hidden space-y-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
                             <div>
-                                <h3 class="font-extrabold text-slate-900 text-lg">Daily Attendance Sheet</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Select a date and record attendance for individual students.</p>
+                                <h3 class="font-extrabold text-slate-900 text-lg">Daily Attendance Sheet & Email Dispatch</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Select a date, mark attendance, save, send individual emails, or use the "Send to All" option at the bottom.</p>
                             </div>
                             <div class="flex items-center gap-3">
                                 <label class="text-xs font-bold text-slate-600">Select Date:</label>
@@ -183,7 +180,7 @@
                         </div>
 
                         <!-- Action Bar -->
-                        <div class="flex flex-wrap items-center justify-between gap-3 py-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3 py-2">
                             <div class="flex items-center gap-2">
                                 <button type="button" onclick="markAll('Present')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5">
                                     <i class="fa-solid fa-check-double"></i> Mark All Present
@@ -197,7 +194,7 @@
                             </div>
                         </div>
 
-                        <!-- Students Table -->
+                        <!-- Students Table with Individual Send and Send to All Option -->
                         <form id="attendance-form" onsubmit="saveAttendance(event)">
                             <div class="overflow-x-auto rounded-xl border border-slate-200 mt-2">
                                 <table class="w-full text-left border-collapse">
@@ -206,7 +203,8 @@
                                             <th class="py-3 px-4">Roll No</th>
                                             <th class="py-3 px-4">Student Name</th>
                                             <th class="py-3 px-4">Email Address</th>
-                                            <th class="py-3 px-4 text-center">Status (Present / Absent / Leave)</th>
+                                            <th class="py-3 px-4 text-center">Status</th>
+                                            <th class="py-3 px-4 text-center">Action (Send Email)</th>
                                         </tr>
                                     </thead>
                                     <tbody id="attendance-table-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
@@ -215,12 +213,33 @@
                                 </table>
                             </div>
 
-                            <div class="mt-6 flex justify-end">
+                            <!-- Bottom Action Bar: Save & Send to All -->
+                            <div class="mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
                                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-blue-600/20 transition flex items-center gap-2">
                                     <i class="fa-solid fa-floppy-disk"></i> Save Attendance Record
                                 </button>
+                                <button type="button" onclick="triggerSendToAll()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-indigo-600/20 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-paper-plane"></i> Send to All Students
+                                </button>
                             </div>
                         </form>
+
+                        <!-- Email Sending Progress Box for Send to All -->
+                        <div id="email-progress-box" class="hidden bg-blue-50 border border-blue-100 p-5 rounded-2xl space-y-3 mt-4">
+                            <div class="flex items-center justify-between text-xs font-bold text-blue-900">
+                                <span id="email-progress-status-text">Preparing emails...</span>
+                                <span id="email-progress-counter">0 / 25</span>
+                            </div>
+                            <div class="w-full bg-blue-200 rounded-full h-2.5 overflow-hidden">
+                                <div id="email-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Results Log Box -->
+                        <div id="email-result-log" class="hidden space-y-2 mt-4">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600">Dispatch Report Summary</h4>
+                            <div id="email-log-content" class="bg-slate-900 text-slate-200 font-mono text-[11px] p-4 rounded-xl max-h-48 overflow-y-auto space-y-1"></div>
+                        </div>
                     </div>
                 </section>
 
@@ -242,55 +261,7 @@
                     </div>
                 </section>
 
-                <!-- 4. WEEKLY REPORTS TAB (Email System) -->
-                <section id="tab-weekly" class="tab-content hidden space-y-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                        <div class="pb-6 border-b border-slate-100">
-                            <span class="bg-indigo-50 text-indigo-700 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-wider">Email Automation</span>
-                            <h3 class="font-extrabold text-slate-900 text-lg mt-2">Weekly Attendance Email Dispatch</h3>
-                            <p class="text-xs text-slate-500 mt-0.5">Select a date range (week) and dispatch personalized individual attendance reports with percentages securely via EmailJS.</p>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Week Start Date</label>
-                                <input type="date" id="week-start-date" class="w-full bg-white border border-slate-200 text-xs font-bold rounded-xl px-3.5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Week End Date</label>
-                                <input type="date" id="week-end-date" class="w-full bg-white border border-slate-200 text-xs font-bold rounded-xl px-3.5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                            </div>
-                        </div>
-
-                        <!-- Email Sending Progress Box -->
-                        <div id="email-progress-box" class="hidden bg-blue-50 border border-blue-100 p-5 rounded-2xl space-y-3">
-                            <div class="flex items-center justify-between text-xs font-bold text-blue-900">
-                                <span id="email-progress-status-text">Preparing weekly emails...</span>
-                                <span id="email-progress-counter">0 / 25</span>
-                            </div>
-                            <div class="w-full bg-blue-200 rounded-full h-2.5 overflow-hidden">
-                                <div id="email-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Results Log Box -->
-                        <div id="email-result-log" class="hidden space-y-2">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600">Dispatch Report Summary</h4>
-                            <div id="email-log-content" class="bg-slate-900 text-slate-200 font-mono text-[11px] p-4 rounded-xl max-h-48 overflow-y-auto space-y-1"></div>
-                        </div>
-
-                        <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
-                            <div class="text-xs text-slate-500">
-                                <i class="fa-solid fa-shield-halved text-blue-600"></i> Ensures sequential rate-limiting (no simultaneous bottlenecks).
-                            </div>
-                            <button onclick="triggerWeeklyEmails()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
-                                <i class="fa-solid fa-paper-plane"></i> Send Weekly Attendance Emails
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 5. STUDENTS LIST TAB -->
+                <!-- 4. STUDENTS LIST TAB -->
                 <section id="tab-students" class="tab-content hidden space-y-6">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
@@ -320,7 +291,7 @@
                     </div>
                 </section>
 
-                <!-- 6. SETTINGS TAB -->
+                <!-- 5. SETTINGS TAB -->
                 <section id="tab-settings" class="tab-content hidden space-y-6">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="pb-6 border-b border-slate-100">
@@ -405,13 +376,6 @@
             const todayStr = getLocalDateString(new Date());
             document.getElementById('attendance-date').value = todayStr;
             document.getElementById('dash-current-date').innerText = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-            
-            // Set default week range (current week)
-            const curr = new Date();
-            const firstDay = new Date(curr.setDate(curr.getDate() - curr.getDay() + 1));
-            const lastDay = new Date(curr.setDate(curr.getDate() - curr.getDay() + 5));
-            document.getElementById('week-start-date').value = getLocalDateString(firstDay);
-            document.getElementById('week-end-date').value = getLocalDateString(lastDay);
 
             // Populate EmailJS settings inputs
             document.getElementById('cfg-public-key').value = emailConfig.publicKey;
@@ -506,7 +470,7 @@
             renderStudentsDirectory();
         }
 
-        // Daily Attendance Management
+        // Daily Attendance Management with Individual Send Button
         function loadAttendanceForDate() {
             const dateStr = document.getElementById('attendance-date').value;
             const tbody = document.getElementById('attendance-table-body');
@@ -533,9 +497,148 @@
                                 </label>
                             </div>
                         </td>
+                        <td class="py-3 px-4 text-center">
+                            <button type="button" onclick="sendIndividualStudentEmail(${st.roll})" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-[11px] px-3.5 py-2 rounded-xl transition shadow-sm flex items-center justify-center gap-1.5 mx-auto">
+                                <i class="fa-solid fa-paper-plane text-xs"></i> Send Email
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
+        }
+
+        // Send Email to a Single Chosen Student
+        async function sendIndividualStudentEmail(roll) {
+            const dateStr = document.getElementById('attendance-date').value;
+            if(!dateStr) {
+                alert('Please select a date.');
+                return;
+            }
+
+            const st = students.find(s => s.roll === roll);
+            if(!st || !st.email || !st.email.includes('@')) {
+                alert(`Student ${st ? st.name : ''} does not have a valid email address. Please update it in the Students List tab.`);
+                switchTab('students');
+                return;
+            }
+
+            const selectedRadio = document.querySelector(`input[name="att_${roll}"]:checked`);
+            const status = selectedRadio ? selectedRadio.value : (attendanceDB[dateStr] && attendanceDB[dateStr][roll] ? attendanceDB[dateStr][roll] : 'Present');
+
+            if(!emailConfig.publicKey || !emailConfig.serviceId || !emailConfig.templateId) {
+                alert('EmailJS credentials are not configured! Please configure them in the Settings tab.');
+                switchTab('settings');
+                return;
+            }
+
+            const confirmSend = confirm(`Send attendance email to ${st.name} (${st.email}) for date ${dateStr} with status: ${status}?`);
+            if(!confirmSend) return;
+
+            emailjs.init(emailConfig.publicKey);
+
+            const templateParams = {
+                to_email: st.email,
+                to_name: st.name,
+                roll_no: st.roll,
+                college_name: "NAMCE-BOYS CAMPUS",
+                department: "Political Science",
+                semester: "5th Semester",
+                attendance_date: dateStr,
+                attendance_status: status
+            };
+
+            try {
+                await emailjs.send(emailConfig.serviceId, emailConfig.templateId, templateParams);
+                alert(`Attendance email successfully sent to ${st.name} (${st.email})!`);
+            } catch (err) {
+                console.error("EmailJS Error:", err);
+                alert(`Failed to send email to ${st.name}: ${err.text || err.message || 'Unknown error'}`);
+            }
+        }
+
+        // Send to All Students (Sequential rate-limited loop)
+        async function triggerSendToAll() {
+            const dateStr = document.getElementById('attendance-date').value;
+            if(!dateStr) {
+                alert('Please select a date.');
+                return;
+            }
+
+            const dayData = attendanceDB[dateStr];
+            if(!dayData) {
+                alert(`No saved attendance records found for ${dateStr}. Please click "Save Attendance Record" before sending to all.`);
+                return;
+            }
+
+            const missingEmailStudents = students.filter(st => !st.email || !st.email.includes('@'));
+            if(missingEmailStudents.length > 0) {
+                alert(`Cannot send to all! ${missingEmailStudents.length} student(s) are missing valid email addresses.`);
+                switchTab('students');
+                return;
+            }
+
+            const confirmSend = confirm(`You are about to send attendance emails to ALL 25 students for date ${dateStr}.\n\nDo you want to proceed?`);
+            if(!confirmSend) return;
+
+            if(!emailConfig.publicKey || !emailConfig.serviceId || !emailConfig.templateId) {
+                alert('EmailJS credentials are not configured! Please configure them in the Settings tab.');
+                switchTab('settings');
+                return;
+            }
+
+            emailjs.init(emailConfig.publicKey);
+
+            const progressBox = document.getElementById('email-progress-box');
+            const progressBar = document.getElementById('email-progress-bar');
+            const progressStatus = document.getElementById('email-progress-status-text');
+            const progressCounter = document.getElementById('email-progress-counter');
+            const logBox = document.getElementById('email-result-log');
+            const logContent = document.getElementById('email-log-content');
+
+            progressBox.classList.remove('hidden');
+            logBox.classList.remove('hidden');
+            logContent.innerHTML = '';
+            progressBar.style.width = '0%';
+
+            let successCount = 0;
+            let failCount = 0;
+
+            for(let i = 0; i < students.length; i++) {
+                const st = students[i];
+                const currentNum = i + 1;
+                
+                progressStatus.innerText = `Sending email to ${st.name} (Roll ${st.roll})...`;
+                progressCounter.innerText = `${currentNum} of ${students.length}`;
+                progressBar.style.width = `${Math.round((currentNum / students.length) * 100)}%`;
+
+                const status = dayData[st.roll] || 'Present';
+
+                const templateParams = {
+                    to_email: st.email,
+                    to_name: st.name,
+                    roll_no: st.roll,
+                    college_name: "NAMCE-BOYS CAMPUS",
+                    department: "Political Science",
+                    semester: "5th Semester",
+                    attendance_date: dateStr,
+                    attendance_status: status
+                };
+
+                try {
+                    await emailjs.send(emailConfig.serviceId, emailConfig.templateId, templateParams);
+                    successCount++;
+                    logContent.innerHTML += `<div class="text-emerald-400">[SUCCESS] Sent to ${st.name} (${st.email})</div>`;
+                } catch (err) {
+                    failCount++;
+                    console.error("EmailJS Error:", err);
+                    logContent.innerHTML += `<div class="text-rose-400">[FAILED] Could not send to ${st.name}: ${err.text || err.message || 'Unknown error'}</div>`;
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 1200));
+            }
+
+            progressStatus.innerText = `Dispatch complete! Success: ${successCount}, Failed: ${failCount}`;
+            logContent.innerHTML += `<div class="text-blue-400 font-bold mt-2">Finished sending to all. Successful: ${successCount}, Failed: ${failCount}</div>`;
         }
 
         function markAll(action) {
@@ -647,126 +750,6 @@
             
             localStorage.setItem('namce_emailjs', JSON.stringify(emailConfig));
             alert('EmailJS settings saved successfully!');
-        }
-
-        // Weekly Email Dispatch System (with rate-limiting / sequential queue)
-        async function triggerWeeklyEmails() {
-            const startDateStr = document.getElementById('week-start-date').value;
-            const endDateStr = document.getElementById('week-end-date').value;
-
-            if(!startDateStr || !endDateStr) {
-                alert('Please select both a start date and end date for the weekly report.');
-                return;
-            }
-
-            // 1. Check that every student has an email address
-            const missingEmailStudents = students.filter(st => !st.email || !st.email.includes('@'));
-            if(missingEmailStudents.length > 0) {
-                alert(`Cannot send emails! ${missingEmailStudents.length} student(s) are missing valid email addresses (e.g., Roll No. ${missingEmailStudents[0].roll} - ${missingEmailStudents[0].name}). Please add them in the Students List tab.`);
-                switchTab('students');
-                return;
-            }
-
-            // 2. Check that attendance exists for the selected date range
-            const datesInRange = getDatesBetween(startDateStr, endDateStr);
-            const availableDates = datesInRange.filter(d => attendanceDB[d]);
-            if(availableDates.length === 0) {
-                alert(`No attendance records found between ${startDateStr} and ${endDateStr}. Please record attendance for at least one date in this range before sending weekly reports.`);
-                return;
-            }
-
-            // 3. Confirmation Dialog
-            const confirmSend = confirm(`You are about to dispatch individual weekly attendance reports with percentages for 25 students covering ${startDateStr} to ${endDateStr}.\n\nDo you want to proceed?`);
-            if(!confirmSend) return;
-
-            // Initialize EmailJS
-            if(!emailConfig.publicKey || !emailConfig.serviceId || !emailConfig.templateId) {
-                alert('EmailJS credentials are not configured! Please configure them in the Settings tab.');
-                switchTab('settings');
-                return;
-            }
-
-            emailjs.init(emailConfig.publicKey);
-
-            // UI Progress Elements
-            const progressBox = document.getElementById('email-progress-box');
-            const progressBar = document.getElementById('email-progress-bar');
-            const progressStatus = document.getElementById('email-progress-status-text');
-            const progressCounter = document.getElementById('email-progress-counter');
-            const logBox = document.getElementById('email-result-log');
-            const logContent = document.getElementById('email-log-content');
-
-            progressBox.classList.remove('hidden');
-            logBox.classList.remove('hidden');
-            logContent.innerHTML = '';
-            progressBar.style.width = '0%';
-
-            let successCount = 0;
-            let failCount = 0;
-
-            for(let i = 0; i < students.length; i++) {
-                const st = students[i];
-                const currentNum = i + 1;
-                
-                progressStatus.innerText = `Sending weekly email to ${st.name} (Roll ${st.roll})...`;
-                progressCounter.innerText = `${currentNum} of ${students.length}`;
-                progressBar.style.width = `${Math.round((currentNum / students.length) * 100)}%`;
-
-                // Calculate attendance stats for this student across the date range
-                let studentPresent = 0, studentAbsent = 0, studentLeave = 0;
-
-                datesInRange.forEach(d => {
-                    const dayRec = attendanceDB[d];
-                    const status = dayRec ? (dayRec[st.roll] || 'Not Recorded') : 'Not Recorded';
-                    
-                    if(status === 'Present') studentPresent++;
-                    else if(status === 'Absent') studentAbsent++;
-                    else if(status === 'Leave') studentLeave++;
-                });
-
-                const totalMarkedDays = studentPresent + studentAbsent + studentLeave;
-                const studentPct = totalMarkedDays > 0 ? Math.round((studentPresent / totalMarkedDays) * 100) : 0;
-
-                // Construct Template Parameters matching EmailJS fields
-                const templateParams = {
-                    to_email: st.email,
-                    to_name: st.name,
-                    roll_no: st.roll,
-                    college_name: "NAMCE-BOYS CAMPUS",
-                    department: "Political Science",
-                    semester: "5th Semester",
-                    attendance_date: `${startDateStr} to ${endDateStr} (Weekly Report)`,
-                    attendance_status: `Present: ${studentPresent} | Absent: ${studentAbsent} | Leave: ${studentLeave} | Percentage: ${studentPct}%`
-                };
-
-                try {
-                    // Sequential send with rate limiting delay (1.2 seconds delay between requests)
-                    await emailjs.send(emailConfig.serviceId, emailConfig.templateId, templateParams);
-                    successCount++;
-                    logContent.innerHTML += `<div class="text-emerald-400">[SUCCESS] Sent weekly report to ${st.name} (${st.email}) - ${studentPct}%</div>`;
-                } catch (err) {
-                    failCount++;
-                    console.error("EmailJS Error:", err);
-                    logContent.innerHTML += `<div class="text-rose-400">[FAILED] Could not send to ${st.name}: ${err.text || err.message || 'Unknown error'}</div>`;
-                }
-
-                // Rate limiting pause between emails
-                await new Promise(resolve => setTimeout(resolve, 1200));
-            }
-
-            progressStatus.innerText = `Weekly dispatch complete! Success: ${successCount}, Failed: ${failCount}`;
-            logContent.innerHTML += `<div class="text-blue-400 font-bold mt-2">Finished sending weekly reports. Total Successful: ${successCount}, Total Failed: ${failCount}</div>`;
-        }
-
-        function getDatesBetween(startDate, endDate) {
-            let dates = [];
-            let currDate = new Date(startDate);
-            let lastDate = new Date(endDate);
-            while(currDate <= lastDate) {
-                dates.push(getLocalDateString(new Date(currDate)));
-                currDate.setDate(currDate.getDate() + 1);
-            }
-            return dates;
         }
     </script>
 </body>
