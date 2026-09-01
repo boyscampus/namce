@@ -1,238 +1,773 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nazir Ajmal Memorial College of Education (Boys' Campus)</title>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Font Awesome 6 Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAMCE-BOYS CAMPUS - Attendance Management</title>
+    <!-- Tailwind CSS CDN for Modern Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
-  <!-- Top Contact & Info Bar -->
-  <div class="top-bar d-none d-md-block">
-    <div class="container d-flex justify-content-between align-items-center">
-      <div>
-        <i class="fa-solid fa-location-dot me-2"></i> Hojai, Assam, India - 782435
-        <i class="fa-solid fa-phone ms-3 me-2"></i> +91 9387127176
-        <i class="fa-solid fa-envelope ms-3 me-2"></i> boyscampusnamce@gmail.com
-      </div>
-      <div>
-        <i class="fa-solid fa-graduation-cap me-1"></i> Affiliated to Gauhati University
-      </div>
+    <!-- ========================================== -->
+    <!-- LOGIN VIEW -->
+    <!-- ========================================== -->
+    <div id="login-view" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-100">
+            <div class="text-center mb-8">
+                <div class="bg-blue-600 text-white w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl font-bold shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold text-slate-900">NAMCE-BOYS CAMPUS</h1>
+                <p class="text-sm font-medium text-slate-500 mt-1">Political Science | 5th Semester</p>
+            </div>
+            
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Admin Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="admin-password" required placeholder="Enter admin password"
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition">
+                    </div>
+                </div>
+                <div id="login-error" class="hidden text-xs font-semibold text-rose-500 bg-rose-50 p-3 rounded-lg border border-rose-100 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation"></i> Incorrect password. Please try again.
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-lg shadow-blue-600/30 transition duration-200 flex items-center justify-center gap-2">
+                    <span>Admin Login</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+            </form>
+            <div class="mt-6 text-center">
+                <p class="text-xs text-slate-400">Secure Portal • LocalStorage Enabled</p>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Main Navigation Bar -->
-  <nav class="navbar navbar-expand-lg sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="index.html">
-        <i class="fa-solid fa-university fa-2x" style="color: var(--primary-maroon);"></i>
-        <div class="brand-text">
-          <span class="brand-title">NAMCE BOYS' CAMPUS</span>
-          <span class="brand-subtitle">GAUHATI UNIVERSITY AFFILIATED</span>
+    <!-- ========================================== -->
+    <!-- MAIN DASHBOARD APP (Hidden by default) -->
+    <!-- ========================================== -->
+    <div id="app-view" class="hidden flex-1 flex flex-col">
+        <!-- Top Navbar -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
+                        <i class="fa-solid fa-landmark text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-slate-900 leading-tight">NAMCE-BOYS CAMPUS</h2>
+                        <p class="text-xs font-medium text-slate-500">Political Science • 5th Semester</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="hidden sm:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600">
+                        <i class="fa-solid fa-user-shield text-blue-600"></i> Admin Session
+                    </div>
+                    <button onclick="handleLogout()" class="bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-600 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <!-- Sidebar Navigation -->
+            <aside class="lg:col-span-1">
+                <nav class="space-y-1.5 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition tab-btn bg-blue-600 text-white shadow-md shadow-blue-600/20">
+                        <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
+                    </button>
+                    <button onclick="switchTab('daily')" id="nav-daily" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-calendar-check w-5 text-center"></i> Daily Attendance
+                    </button>
+                    <button onclick="switchTab('history')" id="nav-history" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> Attendance History
+                    </button>
+                    <button onclick="switchTab('weekly')" id="nav-weekly" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-envelope-circle-check w-5 text-center"></i> Weekly Reports
+                    </button>
+                    <button onclick="switchTab('students')" id="nav-students" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-users w-5 text-center"></i> Students List
+                    </button>
+                    <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-gear w-5 text-center"></i> Settings
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="lg:col-span-4 space-y-6">
+
+                <!-- 1. DASHBOARD TAB -->
+                <section id="tab-dashboard" class="tab-content space-y-6">
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-blue-600/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <span class="bg-blue-500/30 text-blue-100 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-wider">Live System Overview</span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Welcome Back, Admin</h2>
+                            <p class="text-blue-100 text-xs sm:text-sm mt-1">Political Science 5th Semester Management Console.</p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-right">
+                            <p class="text-xs text-blue-200 font-medium">Today's Date</p>
+                            <p id="dash-current-date" class="text-sm font-bold mt-0.5"></p>
+                        </div>
+                    </div>
+
+                    <!-- Metric Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Total Enrolled</span>
+                                <div class="bg-blue-50 text-blue-600 w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-users"></i></div>
+                            </div>
+                            <h3 class="text-3xl font-extrabold text-slate-900 mt-3" id="stat-total">25</h3>
+                            <p class="text-[11px] font-semibold text-slate-600 mt-1">Fixed Class Strength</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Today Present</span>
+                                <div class="bg-emerald-50 text-emerald-600 w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-user-check"></i></div>
+                            </div>
+                            <h3 class="text-3xl font-extrabold text-emerald-600 mt-3" id="stat-present">0</h3>
+                            <p class="text-[11px] font-semibold text-slate-600 mt-1">Marked Present Today</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Today Absent</span>
+                                <div class="bg-rose-50 text-rose-600 w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-user-xmark"></i></div>
+                            </div>
+                            <h3 class="text-3xl font-extrabold text-rose-600 mt-3" id="stat-absent">0</h3>
+                            <p class="text-[11px] font-semibold text-slate-600 mt-1">Marked Absent Today</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Today's Rate</span>
+                                <div class="bg-amber-50 text-amber-600 w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-chart-line"></i></div>
+                            </div>
+                            <h3 class="text-3xl font-extrabold text-slate-900 mt-3" id="stat-percentage">0%</h3>
+                            <p class="text-[11px] font-semibold text-slate-600 mt-1">Overall Attendance</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Action Card -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-base">Ready to take today's attendance?</h4>
+                            <p class="text-xs text-slate-500 mt-0.5">Quickly record or update attendance for all 25 students.</p>
+                        </div>
+                        <button onclick="switchTab('daily')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-3 rounded-xl shadow-md shadow-blue-600/20 transition flex items-center gap-2">
+                            <span>Open Daily Attendance</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 2. DAILY ATTENDANCE TAB -->
+                <section id="tab-daily" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                            <div>
+                                <h3 class="font-extrabold text-slate-900 text-lg">Daily Attendance Sheet</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Select a date and record attendance for individual students.</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label class="text-xs font-bold text-slate-600">Select Date:</label>
+                                <input type="date" id="attendance-date" onchange="loadAttendanceForDate()"
+                                    class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                            </div>
+                        </div>
+
+                        <!-- Action Bar -->
+                        <div class="flex flex-wrap items-center justify-between gap-3 py-4">
+                            <div class="flex items-center gap-2">
+                                <button type="button" onclick="markAll('Present')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-check-double"></i> Mark All Present
+                                </button>
+                                <button type="button" onclick="markAll('Clear')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-rotate-left"></i> Clear All
+                                </button>
+                            </div>
+                            <div id="attendance-status-badge" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-100">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Unsaved changes for date
+                            </div>
+                        </div>
+
+                        <!-- Students Table -->
+                        <form id="attendance-form" onsubmit="saveAttendance(event)">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 mt-2">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-[11px] font-bold uppercase tracking-wider">
+                                            <th class="py-3 px-4">Roll No</th>
+                                            <th class="py-3 px-4">Student Name</th>
+                                            <th class="py-3 px-4">Email Address</th>
+                                            <th class="py-3 px-4 text-center">Status (Present / Absent / Leave)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attendance-table-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                                        <!-- Dynamically injected -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="mt-6 flex justify-end">
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-blue-600/20 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save Attendance Record
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- 3. ATTENDANCE HISTORY TAB -->
+                <section id="tab-history" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="pb-6 border-b border-slate-100">
+                            <h3 class="font-extrabold text-slate-900 text-lg">Attendance History & Logs</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Review, audit, or modify past attendance records by choosing a date.</p>
+                        </div>
+                        <div class="py-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                            <label class="text-xs font-bold text-slate-600">Select Past Date to Review/Edit:</label>
+                            <input type="date" id="history-date-picker" onchange="jumpToHistoryDate(this.value)"
+                                class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        </div>
+                        <div id="history-summary-box" class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-xs text-slate-600">
+                            <p class="font-medium">Please select a date above to view summary statistics and load records.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. WEEKLY REPORTS TAB (Email System) -->
+                <section id="tab-weekly" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                        <div class="pb-6 border-b border-slate-100">
+                            <span class="bg-indigo-50 text-indigo-700 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-wider">Email Automation</span>
+                            <h3 class="font-extrabold text-slate-900 text-lg mt-2">Weekly Attendance Email Dispatch</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Select a date range (week) and dispatch personalized individual attendance reports with percentages securely via EmailJS.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Week Start Date</label>
+                                <input type="date" id="week-start-date" class="w-full bg-white border border-slate-200 text-xs font-bold rounded-xl px-3.5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Week End Date</label>
+                                <input type="date" id="week-end-date" class="w-full bg-white border border-slate-200 text-xs font-bold rounded-xl px-3.5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                            </div>
+                        </div>
+
+                        <!-- Email Sending Progress Box -->
+                        <div id="email-progress-box" class="hidden bg-blue-50 border border-blue-100 p-5 rounded-2xl space-y-3">
+                            <div class="flex items-center justify-between text-xs font-bold text-blue-900">
+                                <span id="email-progress-status-text">Preparing weekly emails...</span>
+                                <span id="email-progress-counter">0 / 25</span>
+                            </div>
+                            <div class="w-full bg-blue-200 rounded-full h-2.5 overflow-hidden">
+                                <div id="email-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Results Log Box -->
+                        <div id="email-result-log" class="hidden space-y-2">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600">Dispatch Report Summary</h4>
+                            <div id="email-log-content" class="bg-slate-900 text-slate-200 font-mono text-[11px] p-4 rounded-xl max-h-48 overflow-y-auto space-y-1"></div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
+                            <div class="text-xs text-slate-500">
+                                <i class="fa-solid fa-shield-halved text-blue-600"></i> Ensures sequential rate-limiting (no simultaneous bottlenecks).
+                            </div>
+                            <button onclick="triggerWeeklyEmails()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Send Weekly Attendance Emails
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. STUDENTS LIST TAB -->
+                <section id="tab-students" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                            <div>
+                                <h3 class="font-extrabold text-slate-900 text-lg">Registered Students Directory (25 Students)</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Political Science • 5th Semester. Verified batch records. Update emails directly below; changes save automatically.</p>
+                            </div>
+                            <button onclick="saveStudentEmails()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-md shadow-emerald-600/20 flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Email Changes
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 mt-6">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-[11px] font-bold uppercase tracking-wider">
+                                        <th class="py-3.5 px-4">Roll No</th>
+                                        <th class="py-3.5 px-4">Student Name</th>
+                                        <th class="py-3.5 px-4">Email Address (Editable)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-directory-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                                    <!-- Injected dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. SETTINGS TAB -->
+                <section id="tab-settings" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                        <div class="pb-6 border-b border-slate-100">
+                            <h3 class="font-extrabold text-slate-900 text-lg">System Settings & EmailJS Configuration</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Configure your EmailJS keys securely for browser-based emailing.</p>
+                        </div>
+
+                        <div class="space-y-4 max-w-2xl">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">EmailJS Public Key</label>
+                                <input type="text" id="cfg-public-key" value="rIrsBxnfzLtViEJLh" placeholder="e.g. rIrsBxnfzLtViEJLh"
+                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">EmailJS Service ID</label>
+                                <input type="text" id="cfg-service-id" value="service_qki18kf" placeholder="e.g. service_qki18kf"
+                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">EmailJS Template ID</label>
+                                <input type="text" id="cfg-template-id" value="template_9m684xb" placeholder="e.g. template_9m684xb"
+                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div class="pt-2">
+                                <button onclick="saveEmailJSConfig()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-blue-600/20 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save EmailJS Configuration
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50 border border-amber-200 p-5 rounded-2xl text-xs text-amber-900 space-y-2">
+                            <p class="font-bold flex items-center gap-2"><i class="fa-solid fa-circle-info text-amber-600"></i> Production & Security Note:</p>
+                            <p>This frontend demo utilizes local storage and browser-grade authentication. For live enterprise deployment, migrate authentication to a secure backend server and store credentials securely.</p>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
         </div>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto align-items-center">
-          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="departments.html">Departments</a></li>
-          <li class="nav-item"><a class="nav-link" href="faculty.html">Faculty</a></li>
-          <li class="nav-item"><a class="nav-link" href="creative-corner.html">Creative Corner</a></li>
-          <li class="nav-item"><a class="nav-link" href="notices.html">Notices</a></li>
-          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
-          <li class="nav-item"><a class="nav-link" href="downloads.html">Downloads</a></li>
-          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-        </ul>
-      </div>
     </div>
-  </nav>
 
-  <!-- Hero Banner Section -->
-  <section class="hero-section text-center py-5">
-    <div class="container py-5">
-      <div class="row justify-content-center">
-        <div class="col-lg-10">
-          <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold text-uppercase mb-3">Welcome to NAMCE Boys' Campus</span>
-          <h1 class="display-4 fw-bold text-white font-heading mb-3">Empowering Minds, Shaping Tomorrow</h1>
-          <p class="lead text-light mb-4">Affiliated to Gauhati University, offering premier Degree Programs and Teacher Education with modern academic infrastructure in Hojai, Assam.</p>
-          <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="about.html" class="btn btn-warning btn-lg fw-bold px-4">Explore Campus</a>
-            <a href="student-login.html" class="btn btn-outline-light btn-lg fw-bold px-4">Student Portal</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <!-- ========================================== -->
+    <script>
+        // 25 Students Dataset with verified email IDs extracted from Samarth Batch July 2024 records
+        const initialStudents = [
+            { roll: 3, name: "Abdul Kasem", email: "abdulkashim037@gmail.com" },
+            { roll: 4, name: "Wahid Barbuya", email: "aw0604262@gmail.com" },
+            { roll: 5, name: "Afzal Hussain", email: "afzalclothstore597@gmail.com" },
+            { roll: 6, name: "Alomgir Mondal", email: "aomgirmondel@gmail.com" },
+            { roll: 9, name: "Arif Arman", email: "arifarman200616@gmail.com" },
+            { roll: 13, name: "Gautam Kumar", email: "Kamit3559l.com@gmail.com" },
+            { roll: 14, name: "Iqbal Hussain", email: "hussainrabbi79@gmail.com" },
+            { roll: 15, name: "Kunal Hasnu", email: "hasnuradesh@gmail.com" },
+            { roll: 16, name: "Mahfuz Alom", email: "mahfouzalam555@gmail.com" },
+            { roll: 17, name: "Manab Baruah", email: "baruahmanab04@gmail.com" },
+            { roll: 18, name: "Manjur Ahmed", email: "ummesalma.kpt@gmail.com" },
+            { roll: 19, name: "Masum Suhel", email: "masumsuhel1@gmail.com" },
+            { roll: 20, name: "Mukesh Chauhan", email: "mukeshchauhan986428@gmail.com" },
+            { roll: 21, name: "Newaj Ahmed", email: "newaja35@gmail.com" },
+            { roll: 22, name: "Nur Amin", email: "nuramin9668@gmail.com" },
+            { roll: 23, name: "Nuruz Zaman", email: "nuruz6747@gmail.com" },
+            { roll: 25, name: "Piarul Islam", email: "ipiarul725@gmail.com" },
+            { roll: 29, name: "Ruhal Ahmed", email: "ruhala867@gmail.com" },
+            { roll: 30, name: "Samiul Islam", email: "ikhadimul136@gmail.com" },
+            { roll: 31, name: "Samsul Alom", email: "alomsamsul29011@gmail.com" },
+            { roll: 33, name: "Shaminur Sikdar", email: "shaminursikdar2005@gmail.com" },
+            { roll: 34, name: "Sheikh Farid", email: "sf0070261@gmail.com" },
+            { roll: 35, name: "Thanjit Hasnu", email: "hasnu6001@gmail.com" },
+            { roll: 36, name: "Yahia Ahmed", email: "habibur60296@gmail.com" },
+            { roll: 37, name: "Zaid Hussain", email: "zh3349672@gmail.com" }
+        ].sort((a, b) => a.roll - b.roll);
 
-  <!-- Portal Access Cards -->
-  <section class="py-5 bg-light">
-    <div class="container">
-      <div class="text-center mb-5">
-        <h2 class="fw-bold font-heading text-dark">Institutional Access Portals</h2>
-        <p class="text-muted">Direct authentication portals for Students, Faculty, and Management</p>
-      </div>
-      <div class="row g-4">
-        
-        <!-- Student Login Card -->
-        <div class="col-md-4">
-          <div class="glass-card p-4 text-center h-100">
-            <div class="bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-              <i class="fa-solid fa-user-graduate fa-2x"></i>
-            </div>
-            <h4 class="fw-bold text-dark mb-2">Student Portal</h4>
-            <p class="text-muted small mb-4">Submit creative writings, access syllabus, check notices, and view academic records.</p>
-            <a href="student-login.html" class="btn btn-primary w-100 fw-bold">Student Login</a>
-          </div>
-        </div>
+        // State Management
+        let students = JSON.parse(localStorage.getItem('namce_students')) || initialStudents;
+        let attendanceDB = JSON.parse(localStorage.getItem('namce_attendance')) || {};
+        let emailConfig = JSON.parse(localStorage.getItem('namce_emailjs')) || { publicKey: 'rIrsBxnfzLtViEJLh', serviceId: 'service_qki18kf', templateId: 'template_9m684xb' };
 
-        <!-- Teacher Login Card -->
-        <div class="col-md-4">
-          <div class="glass-card p-4 text-center h-100">
-            <div class="bg-danger text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-              <i class="fa-solid fa-chalkboard-user fa-2x"></i>
-            </div>
-            <h4 class="fw-bold text-dark mb-2">Faculty Portal</h4>
-            <p class="text-muted small mb-4">Publish articles, upload lecture notes, and review student creative submissions.</p>
-            <a href="teacher-login.html" class="btn btn-danger w-100 fw-bold">Faculty Login</a>
-          </div>
-        </div>
+        // Initialization on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            const todayStr = getLocalDateString(new Date());
+            document.getElementById('attendance-date').value = todayStr;
+            document.getElementById('dash-current-date').innerText = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            
+            // Set default week range (current week)
+            const curr = new Date();
+            const firstDay = new Date(curr.setDate(curr.getDate() - curr.getDay() + 1));
+            const lastDay = new Date(curr.setDate(curr.getDate() - curr.getDay() + 5));
+            document.getElementById('week-start-date').value = getLocalDateString(firstDay);
+            document.getElementById('week-end-date').value = getLocalDateString(lastDay);
 
-        <!-- Admin Login Card -->
-        <div class="col-md-4">
-          <div class="glass-card p-4 text-center h-100">
-            <div class="bg-dark text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-              <i class="fa-solid fa-user-shield fa-2x"></i>
-            </div>
-            <h4 class="fw-bold text-dark mb-2">Admin Portal</h4>
-            <p class="text-muted small mb-4">Manage institutional notices, moderate creative content, and control site settings.</p>
-            <a href="admin-login.html" class="btn btn-dark w-100 fw-bold">Admin Portal</a>
-          </div>
-        </div>
+            // Populate EmailJS settings inputs
+            document.getElementById('cfg-public-key').value = emailConfig.publicKey;
+            document.getElementById('cfg-service-id').value = emailConfig.serviceId;
+            document.getElementById('cfg-template-id').value = emailConfig.templateId;
 
-      </div>
-    </div>
-  </section>
+            // Check login state
+            if (localStorage.getItem('namce_logged_in') === 'true') {
+                showApp();
+            }
+            renderStudentsDirectory();
+            loadAttendanceForDate();
+            updateDashboardStats();
+        });
 
-  <!-- Key Highlights & Academic Departments -->
-  <section class="py-5">
-    <div class="container">
-      <div class="row align-items-center g-5">
-        <div class="col-lg-6">
-          <span class="text-danger fw-bold text-uppercase">Academic Excellence</span>
-          <h2 class="fw-bold font-heading display-6 mb-3">Nurturing Future Educators & Professionals</h2>
-          <p class="text-muted mb-4">Nazir Ajmal Memorial College of Education (Boys' Campus) provides a disciplined academic environment with structured undergraduate courses under Gauhati University guidelines.</p>
-          
-          <div class="d-flex align-items-start mb-3">
-            <i class="fa-solid fa-circle-check text-success fa-lg me-3 mt-1"></i>
-            <div>
-              <h6 class="fw-bold mb-1">Qualified & Experienced Faculty</h6>
-              <p class="text-muted small mb-0">Dedicated professors across Political Science, English, Education, and Languages.</p>
-            </div>
-          </div>
+        function getLocalDateString(date) {
+            const offset = date.getTimezoneOffset();
+            const adjustedDate = new Date(date.getTime() - (offset*60*1000));
+            return adjustedDate.toISOString().split('T')[0];
+        }
 
-          <div class="d-flex align-items-start mb-3">
-            <i class="fa-solid fa-circle-check text-success fa-lg me-3 mt-1"></i>
-            <div>
-              <h6 class="fw-bold mb-1">Digital Campus & Creative Platform</h6>
-              <p class="text-muted small mb-0">Integrated online portal for student articles, poems, and academic downloads.</p>
-            </div>
-          </div>
+        // Authentication Handler
+        function handleLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('admin-password').value;
+            if (pass === 'Newaj@2005') {
+                localStorage.setItem('namce_logged_in', 'true');
+                showApp();
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
 
-          <div class="d-flex align-items-start">
-            <i class="fa-solid fa-circle-check text-success fa-lg me-3 mt-1"></i>
-            <div>
-              <h6 class="fw-bold mb-1">Modern Library & Seminar Facilities</h6>
-              <p class="text-muted small mb-0">Rich collection of course literature, reference material, and research journals.</p>
-            </div>
-          </div>
+        function handleLogout() {
+            localStorage.removeItem('namce_logged_in');
+            document.getElementById('app-view').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('admin-password').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+        }
 
-        </div>
+        function showApp() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('app-view').classList.remove('hidden');
+            updateDashboardStats();
+            loadAttendanceForDate();
+        }
 
-        <div class="col-lg-6">
-          <div class="glass-card p-4 border-top border-4 border-primary">
-            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-bell text-warning me-2"></i>Latest Campus Announcements</h4>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item bg-transparent px-0 py-3">
-                <span class="badge bg-danger mb-1">Notice</span>
-                <h6 class="fw-bold mb-1"><a href="notices.html" class="text-decoration-none text-dark">B.A. Semester Examinations Registration Notice</a></h6>
-                <p class="small text-muted mb-0">Issued by Academic Cell • Gauhati University Guidelines</p>
-              </li>
-              <li class="list-group-item bg-transparent px-0 py-3">
-                <span class="badge bg-primary mb-1">Creative Corner</span>
-                <h6 class="fw-bold mb-1"><a href="creative-corner.html" class="text-decoration-none text-dark">Submissions Open for Student Magazine 2026</a></h6>
-                <p class="small text-muted mb-0">Submit poems, essays, and artwork via Student Dashboard</p>
-              </li>
-            </ul>
-            <div class="mt-3 text-end">
-              <a href="notices.html" class="small fw-bold text-decoration-none text-primary">View All Notices <i class="fa-solid fa-arrow-right ms-1"></i></a>
-            </div>
-          </div>
-        </div>
+        // Navigation Tabs
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20');
+                el.classList.add('text-slate-600', 'hover:bg-slate-50');
+            });
+            
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+            activeBtn.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20');
 
-      </div>
-    </div>
-  </section>
+            if(tabId === 'dashboard') updateDashboardStats();
+        }
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="row g-4">
-        <div class="col-lg-4 col-md-6">
-          <h5 class="text-white"><i class="fa-solid fa-university me-2 text-warning"></i>NAMCE Boys' Campus</h5>
-          <p class="small">Affiliated to Gauhati University. Offering premier Bachelor of Arts (B.A.) education with modern campus infrastructure in Assam.</p>
-        </div>
-        <div class="col-lg-2 col-md-6">
-          <h5>Quick Links</h5>
-          <ul class="list-unstyled">
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="departments.html">Departments</a></li>
-            <li><a href="faculty.html">Faculty</a></li>
-            <li><a href="creative-corner.html">Creative Corner</a></li>
-          </ul>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <h5>Portals</h5>
-          <ul class="list-unstyled">
-            <li><a href="student-login.html">Student Login</a></li>
-            <li><a href="teacher-login.html">Teacher Login</a></li>
-            <li><a href="admin-login.html">Admin Portal</a></li>
-          </ul>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <h5>Contact Campus</h5>
-          <p class="small mb-1"><i class="fa-solid fa-location-dot text-warning me-2"></i>Hojai, Assam - 782435</p>
-          <p class="small mb-1"><i class="fa-solid fa-envelope text-warning me-2"></i>boyscampusnamce@gmail.com</p>
-          <p class="small"><i class="fa-solid fa-phone text-warning me-2"></i>+91 9387127176</p>
-        </div>
-      </div>
-      <hr class="mt-4 border-secondary">
-      <div class="text-center text-muted small">
-        &copy; Nazir Ajmal Memorial College of Education (Boys' Campus). All Rights Reserved.
-      </div>
-    </div>
-  </footer>
+        // Students Directory Render & Save
+        function renderStudentsDirectory() {
+            const tbody = document.getElementById('students-directory-body');
+            tbody.innerHTML = '';
+            students.forEach((st, idx) => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3 px-4 font-bold text-slate-900">${st.roll}</td>
+                        <td class="py-3 px-4 font-semibold text-slate-800">${st.name}</td>
+                        <td class="py-3 px-4">
+                            <input type="email" value="${st.email || ''}" placeholder="Enter student email address..." 
+                                onchange="updateStudentEmail(${st.roll}, this.value)"
+                                class="w-full max-w-md bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        </td>
+                    </tr>
+                `;
+            });
+        }
 
-  <!-- Scroll-To-Top Button -->
-  <button id="scrollTopBtn" title="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+        function updateStudentEmail(roll, val) {
+            const st = students.find(s => s.roll === roll);
+            if(st) st.email = val.trim();
+        }
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="script.js"></script>
+        function saveStudentEmails() {
+            localStorage.setItem('namce_students', JSON.stringify(students));
+            alert('Student email directory updated and saved successfully!');
+            renderStudentsDirectory();
+        }
+
+        // Daily Attendance Management
+        function loadAttendanceForDate() {
+            const dateStr = document.getElementById('attendance-date').value;
+            const tbody = document.getElementById('attendance-table-body');
+            const dayData = attendanceDB[dateStr] || {};
+            
+            tbody.innerHTML = '';
+            students.forEach(st => {
+                const status = dayData[st.roll] || 'Present'; // Default to Present
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3 px-4 font-bold text-slate-900">${st.roll}</td>
+                        <td class="py-3 px-4 font-semibold text-slate-800">${st.name}</td>
+                        <td class="py-3 px-4 text-slate-500">${st.email || '<span class="text-amber-500 italic">No email set</span>'}</td>
+                        <td class="py-3 px-4">
+                            <div class="flex items-center justify-center gap-3">
+                                <label class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 cursor-pointer">
+                                    <input type="radio" name="att_${st.roll}" value="Present" ${status === 'Present' ? 'checked' : ''} class="text-emerald-600 focus:ring-emerald-500"> Present
+                                </label>
+                                <label class="inline-flex items-center gap-1 text-xs font-bold text-rose-600 cursor-pointer">
+                                    <input type="radio" name="att_${st.roll}" value="Absent" ${status === 'Absent' ? 'checked' : ''} class="text-rose-600 focus:ring-rose-500"> Absent
+                                </label>
+                                <label class="inline-flex items-center gap-1 text-xs font-bold text-amber-600 cursor-pointer">
+                                    <input type="radio" name="att_${st.roll}" value="Leave" ${status === 'Leave' ? 'checked' : ''} class="text-amber-600 focus:ring-amber-500"> Leave
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function markAll(action) {
+            students.forEach(st => {
+                if(action === 'Present') {
+                    const radio = document.querySelector(`input[name="att_${st.roll}"][value="Present"]`);
+                    if(radio) radio.checked = true;
+                } else {
+                    const radios = document.querySelectorAll(`input[name="att_${st.roll}"]`);
+                    radios.forEach(r => r.checked = false);
+                }
+            });
+        }
+
+        function saveAttendance(e) {
+            e.preventDefault();
+            const dateStr = document.getElementById('attendance-date').value;
+            if(!dateStr) {
+                alert('Please select a valid date.');
+                return;
+            }
+
+            const dayRecord = {};
+            let unassignedCount = 0;
+
+            students.forEach(st => {
+                const selected = document.querySelector(`input[name="att_${st.roll}"]:checked`);
+                if(!selected) {
+                    unassignedCount++;
+                } else {
+                    dayRecord[st.roll] = selected.value;
+                }
+            });
+
+            if(unassignedCount > 0) {
+                alert(`Submission prevented! ${unassignedCount} student(s) have not been marked. Please ensure every student is marked Present, Absent, or Leave.`);
+                return;
+            }
+
+            attendanceDB[dateStr] = dayRecord;
+            localStorage.setItem('namce_attendance', JSON.stringify(attendanceDB));
+            updateDashboardStats();
+            alert(`Attendance for ${dateStr} saved successfully!`);
+        }
+
+        // History Jump
+        function jumpToHistoryDate(dateStr) {
+            if(!dateStr) return;
+            const summaryBox = document.getElementById('history-summary-box');
+            const dayData = attendanceDB[dateStr];
+            
+            if(!dayData) {
+                summaryBox.innerHTML = `<p class="text-rose-600 font-bold">No attendance records found for date: ${dateStr}. Go to Daily Attendance to record.</p>`;
+                return;
+            }
+
+            let p = 0, a = 0, l = 0;
+            Object.values(dayData).forEach(val => {
+                if(val === 'Present') p++;
+                else if(val === 'Absent') a++;
+                else if(val === 'Leave') l++;
+            });
+            const pct = Math.round((p / 25) * 100);
+
+            summaryBox.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Attendance Summary for ${dateStr}</span>
+                        <button onclick="document.getElementById('attendance-date').value='${dateStr}'; switchTab('daily');" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-700 transition">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit This Date
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">PRESENT</span><strong class="text-emerald-600 text-base">${p}</strong></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">ABSENT</span><strong class="text-rose-600 text-base">${a}</strong></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">LEAVE</span><strong class="text-amber-600 text-base">${l}</strong></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">PERCENTAGE</span><strong class="text-blue-600 text-base">${pct}%</strong></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Dashboard Stats calculation
+        function updateDashboardStats() {
+            const todayStr = getLocalDateString(new Date());
+            const dayData = attendanceDB[todayStr] || {};
+            let p = 0, a = 0, l = 0;
+            
+            students.forEach(st => {
+                const status = dayData[st.roll];
+                if(status === 'Present') p++;
+                else if(status === 'Absent') a++;
+                else if(status === 'Leave') l++;
+            });
+
+            const totalRecorded = p + a + l;
+            const pct = totalRecorded > 0 ? Math.round((p / 25) * 100) : 0;
+
+            document.getElementById('stat-present').innerText = p;
+            document.getElementById('stat-absent').innerText = a;
+            document.getElementById('stat-percentage').innerText = `${pct}%`;
+        }
+
+        // Settings Save
+        function saveEmailJSConfig() {
+            emailConfig.publicKey = document.getElementById('cfg-public-key').value.trim();
+            emailConfig.serviceId = document.getElementById('cfg-service-id').value.trim();
+            emailConfig.templateId = document.getElementById('cfg-template-id').value.trim();
+            
+            localStorage.setItem('namce_emailjs', JSON.stringify(emailConfig));
+            alert('EmailJS settings saved successfully!');
+        }
+
+        // Weekly Email Dispatch System (with rate-limiting / sequential queue)
+        async function triggerWeeklyEmails() {
+            const startDateStr = document.getElementById('week-start-date').value;
+            const endDateStr = document.getElementById('week-end-date').value;
+
+            if(!startDateStr || !endDateStr) {
+                alert('Please select both a start date and end date for the weekly report.');
+                return;
+            }
+
+            // 1. Check that every student has an email address
+            const missingEmailStudents = students.filter(st => !st.email || !st.email.includes('@'));
+            if(missingEmailStudents.length > 0) {
+                alert(`Cannot send emails! ${missingEmailStudents.length} student(s) are missing valid email addresses (e.g., Roll No. ${missingEmailStudents[0].roll} - ${missingEmailStudents[0].name}). Please add them in the Students List tab.`);
+                switchTab('students');
+                return;
+            }
+
+            // 2. Check that attendance exists for the selected date range
+            const datesInRange = getDatesBetween(startDateStr, endDateStr);
+            const availableDates = datesInRange.filter(d => attendanceDB[d]);
+            if(availableDates.length === 0) {
+                alert(`No attendance records found between ${startDateStr} and ${endDateStr}. Please record attendance for at least one date in this range before sending weekly reports.`);
+                return;
+            }
+
+            // 3. Confirmation Dialog
+            const confirmSend = confirm(`You are about to dispatch individual weekly attendance reports with percentages for 25 students covering ${startDateStr} to ${endDateStr}.\n\nDo you want to proceed?`);
+            if(!confirmSend) return;
+
+            // Initialize EmailJS
+            if(!emailConfig.publicKey || !emailConfig.serviceId || !emailConfig.templateId) {
+                alert('EmailJS credentials are not configured! Please configure them in the Settings tab.');
+                switchTab('settings');
+                return;
+            }
+
+            emailjs.init(emailConfig.publicKey);
+
+            // UI Progress Elements
+            const progressBox = document.getElementById('email-progress-box');
+            const progressBar = document.getElementById('email-progress-bar');
+            const progressStatus = document.getElementById('email-progress-status-text');
+            const progressCounter = document.getElementById('email-progress-counter');
+            const logBox = document.getElementById('email-result-log');
+            const logContent = document.getElementById('email-log-content');
+
+            progressBox.classList.remove('hidden');
+            logBox.classList.remove('hidden');
+            logContent.innerHTML = '';
+            progressBar.style.width = '0%';
+
+            let successCount = 0;
+            let failCount = 0;
+
+            for(let i = 0; i < students.length; i++) {
+                const st = students[i];
+                const currentNum = i + 1;
+                
+                progressStatus.innerText = `Sending weekly email to ${st.name} (Roll ${st.roll})...`;
+                progressCounter.innerText = `${currentNum} of ${students.length}`;
+                progressBar.style.width = `${Math.round((currentNum / students.length) * 100)}%`;
+
+                // Calculate attendance stats for this student across the date range
+                let studentPresent = 0, studentAbsent = 0, studentLeave = 0;
+
+                datesInRange.forEach(d => {
+                    const dayRec = attendanceDB[d];
+                    const status = dayRec ? (dayRec[st.roll] || 'Not Recorded') : 'Not Recorded';
+                    
+                    if(status === 'Present') studentPresent++;
+                    else if(status === 'Absent') studentAbsent++;
+                    else if(status === 'Leave') studentLeave++;
+                });
+
+                const totalMarkedDays = studentPresent + studentAbsent + studentLeave;
+                const studentPct = totalMarkedDays > 0 ? Math.round((studentPresent / totalMarkedDays) * 100) : 0;
+
+                // Construct Template Parameters matching EmailJS fields
+                const templateParams = {
+                    to_email: st.email,
+                    to_name: st.name,
+                    roll_no: st.roll,
+                    college_name: "NAMCE-BOYS CAMPUS",
+                    department: "Political Science",
+                    semester: "5th Semester",
+                    attendance_date: `${startDateStr} to ${endDateStr} (Weekly Report)`,
+                    attendance_status: `Present: ${studentPresent} | Absent: ${studentAbsent} | Leave: ${studentLeave} | Percentage: ${studentPct}%`
+                };
+
+                try {
+                    // Sequential send with rate limiting delay (1.2 seconds delay between requests)
+                    await emailjs.send(emailConfig.serviceId, emailConfig.templateId, templateParams);
+                    successCount++;
+                    logContent.innerHTML += `<div class="text-emerald-400">[SUCCESS] Sent weekly report to ${st.name} (${st.email}) - ${studentPct}%</div>`;
+                } catch (err) {
+                    failCount++;
+                    console.error("EmailJS Error:", err);
+                    logContent.innerHTML += `<div class="text-rose-400">[FAILED] Could not send to ${st.name}: ${err.text || err.message || 'Unknown error'}</div>`;
+                }
+
+                // Rate limiting pause between emails
+                await new Promise(resolve => setTimeout(resolve, 1200));
+            }
+
+            progressStatus.innerText = `Weekly dispatch complete! Success: ${successCount}, Failed: ${failCount}`;
+            logContent.innerHTML += `<div class="text-blue-400 font-bold mt-2">Finished sending weekly reports. Total Successful: ${successCount}, Total Failed: ${failCount}</div>`;
+        }
+
+        function getDatesBetween(startDate, endDate) {
+            let dates = [];
+            let currDate = new Date(startDate);
+            let lastDate = new Date(endDate);
+            while(currDate <= lastDate) {
+                dates.push(getLocalDateString(new Date(currDate)));
+                currDate.setDate(currDate.getDate() + 1);
+            }
+            return dates;
+        }
+    </script>
 </body>
 </html>
