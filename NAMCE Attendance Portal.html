@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAMCE-BOYS CAMPUS - Attendance Management</title>
+    <!-- Tailwind CSS CDN for Modern Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        :root { color-scheme: light; }
+        body { background-color: #F8F5F3; }
+        button, input, select { -webkit-tap-highlight-color: transparent; }
+        button:focus-visible, input:focus-visible, select:focus-visible {
+            outline: 2px solid #8B304B;
+            outline-offset: 2px;
+        }
+        @media (max-width: 640px) {
+            #login-view > div { padding: 1.5rem; }
+            #app-view header .max-w-7xl { min-height: 4.5rem; height: auto; padding-top: .65rem; padding-bottom: .65rem; }
+        }
+    </style>
+</head>
+<body class="bg-[#F8F5F3] text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- ========================================== -->
+    <!-- LOGIN VIEW -->
+    <!-- ========================================== -->
+    <div id="login-view" class="fixed inset-0 bg-[#3F1020] flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-100">
+            <div class="text-center mb-8">
+                <img src="namce-logo.jpg" alt="Nazir Ajmal Memorial College of Education official logo"
+                    class="w-full max-w-[300px] h-auto object-contain mx-auto mb-6" loading="eager">
+                <h1 class="text-2xl font-extrabold text-slate-900">NAMCE-BOYS CAMPUS</h1>
+                <p class="text-sm font-medium text-slate-500 mt-1">Political Science | 5th Semester</p>
+            </div>
+            
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Admin Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="admin-password" required placeholder="Enter admin password"
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B304B] focus:bg-white transition">
+                    </div>
+                </div>
+                <div id="login-error" class="hidden text-xs font-semibold text-rose-500 bg-rose-50 p-3 rounded-lg border border-rose-100 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation"></i> Incorrect password. Please try again.
+                </div>
+                <button type="submit" class="w-full bg-[#641C32] hover:bg-[#4E1426] text-white font-semibold py-3 rounded-xl shadow-lg shadow-[#641C32]/20 transition duration-200 flex items-center justify-center gap-2">
+                    <span>Admin Login</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+            </form>
+            <div class="mt-6 text-center">
+                <p class="text-xs text-slate-400">Secure Portal • LocalStorage Enabled</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MAIN DASHBOARD APP (Hidden by default) -->
+    <!-- ========================================== -->
+    <div id="app-view" class="hidden flex-1 flex flex-col">
+        <!-- Top Navbar -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="namce-logo.jpg" alt="NAMCE official college logo" class="w-[112px] sm:w-[150px] h-auto object-contain">
+                    <div>
+                        <h2 class="font-bold text-slate-900 leading-tight">NAMCE-BOYS CAMPUS</h2>
+                        <p class="text-xs font-medium text-slate-500">Political Science • 5th Semester</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="hidden sm:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600">
+                        <i class="fa-solid fa-user-shield text-[#641C32]"></i> Admin Session
+                    </div>
+                    <button onclick="handleLogout()" class="bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-600 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <!-- Sidebar Navigation -->
+            <aside class="lg:col-span-1">
+                <nav class="space-y-1.5 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition tab-btn bg-[#641C32] text-white shadow-md shadow-[#641C32]/20">
+                        <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
+                    </button>
+                    <button onclick="switchTab('daily')" id="nav-daily" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-calendar-check w-5 text-center"></i> Daily Attendance
+                    </button>
+                    <button onclick="switchTab('history')" id="nav-history" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> Attendance History
+                    </button>
+                    <button onclick="switchTab('monthly')" id="nav-monthly" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-chart-column w-5 text-center"></i> Monthly Report
+                    </button>
+                    <button onclick="switchTab('students')" id="nav-students" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-users w-5 text-center"></i> Students List
+                    </button>
+                    <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-gear w-5 text-center"></i> Settings
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="lg:col-span-4 space-y-6">
+
+                <!-- 1. DASHBOARD TAB -->
+                <section id="tab-dashboard" class="tab-content space-y-6">
+                    <div class="bg-gradient-to-r from-[#641C32] to-[#8B304B] rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-[#641C32]/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <span class="bg-white/15 text-rose-50 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-wider">Live System Overview</span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Welcome Back, Admin</h2>
+                            <p class="text-rose-50 text-xs sm:text-sm mt-1">Political Science 5th Semester Management Console.</p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-right">
+                            <p class="text-xs text-rose-100 font-medium">Today's Date</p>
+                            <p id="dash-current-date" class="text-sm font-bold mt-0.5"></p>
+                        </div>
+                    </div>
+
+                    <!-- Metric Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Total Enrolled</span>
+                                <div class="bg-[#F8F1F3] text-[#641C32] w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-users"></i></div>
+                            </div>
+                            <h3 class="text-3xl font-extrabold text-slate-900 mt-3" id="stat-total">25</h3>
+                            <p class="text-[11px] font-semibold text-slate-600 mt-1">Registered Class Strength</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Today Present</span>
+                                <div class="bg-emerald-50 text-emerald-600 w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-user-check"></i></div>
+                            </div>
+                            <h3 class="text-3xl font-extrabold text-emerald-600 mt-3" id="stat-present">0</h3>
+                            <p class="text-[11px] font-semibold text-slate-600 mt-1">Marked Present Today</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Today Absent</span>
+                                <div class="bg-rose-50 text-rose-600 w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-user-xmark"></i></div>
+                            </div>
+                            <h3 class="text-3xl font-extrabold text-rose-600 mt-3" id="stat-absent">0</h3>
+                            <p class="text-[11px] font-semibold text-slate-600 mt-1">Marked Absent Today</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Today's Rate</span>
+                                <div class="bg-amber-50 text-amber-600 w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-chart-line"></i></div>
+                            </div>
+                            <h3 class="text-3xl font-extrabold text-slate-900 mt-3" id="stat-percentage">0%</h3>
+                            <p class="text-[11px] font-semibold text-slate-600 mt-1">Overall Attendance</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Action Card -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-base">Ready to take today's attendance?</h4>
+                            <p class="text-xs text-slate-500 mt-0.5">Quickly record or update attendance for all registered students.</p>
+                        </div>
+                        <button onclick="switchTab('daily')" class="bg-[#641C32] hover:bg-[#4E1426] text-white font-bold text-xs px-5 py-3 rounded-xl shadow-md shadow-[#641C32]/20 transition flex items-center gap-2">
+                            <span>Open Daily Attendance</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 2. DAILY ATTENDANCE TAB -->
+                <section id="tab-daily" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                            <div>
+                                <h3 class="font-extrabold text-slate-900 text-lg">Daily Attendance Sheet & Email Dispatch</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Select a date, mark attendance, save, send individual emails, or use the "Send to All" option at the bottom.</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label class="text-xs font-bold text-slate-600">Select Date:</label>
+                                <input type="date" id="attendance-date" onchange="loadAttendanceForDate()"
+                                    class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
+                            </div>
+                        </div>
+
+                        <!-- Action Bar -->
+                        <div class="flex flex-wrap items-center justify-between gap-3 py-2">
+                            <div class="flex items-center gap-2">
+                                <button type="button" onclick="markAll('Present')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-check-double"></i> Mark All Present
+                                </button>
+                                <button type="button" onclick="markAll('Clear')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-rotate-left"></i> Clear All
+                                </button>
+                            </div>
+                            <div id="attendance-status-badge" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-100">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Unsaved changes for date
+                            </div>
+                        </div>
+
+                        <!-- Students Table with Individual Send and Send to All Option -->
+                        <form id="attendance-form" onsubmit="saveAttendance(event)">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 mt-2">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-[11px] font-bold uppercase tracking-wider">
+                                            <th class="py-3 px-4">Roll No</th>
+                                            <th class="py-3 px-4">Student Name</th>
+                                            <th class="py-3 px-4">Email Address</th>
+                                            <th class="py-3 px-4 text-center">Status</th>
+                                            <th class="py-3 px-4 text-center">Action (Send Email)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attendance-table-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                                        <!-- Dynamically injected -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Bottom Action Bar: Save & Send to All -->
+                            <div class="mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
+                                <button type="submit" class="bg-[#641C32] hover:bg-[#4E1426] text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-[#641C32]/20 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save Attendance Record
+                                </button>
+                                <button type="button" onclick="triggerSendToAll()" class="bg-[#8B304B] hover:bg-[#641C32] text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-[#641C32]/20 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-paper-plane"></i> Send to All Students
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Email Sending Progress Box for Send to All -->
+                        <div id="email-progress-box" class="hidden bg-[#F8F1F3] border border-blue-100 p-5 rounded-2xl space-y-3 mt-4">
+                            <div class="flex items-center justify-between text-xs font-bold text-[#4E1426]">
+                                <span id="email-progress-status-text">Preparing emails...</span>
+                                <span id="email-progress-counter">0 / 25</span>
+                            </div>
+                            <div class="w-full bg-[#E8D1D9] rounded-full h-2.5 overflow-hidden">
+                                <div id="email-progress-bar" class="bg-[#641C32] h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Results Log Box -->
+                        <div id="email-result-log" class="hidden space-y-2 mt-4">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600">Dispatch Report Summary</h4>
+                            <div id="email-log-content" class="bg-slate-900 text-slate-200 font-mono text-[11px] p-4 rounded-xl max-h-48 overflow-y-auto space-y-1"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. ATTENDANCE HISTORY TAB -->
+                <section id="tab-history" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="pb-6 border-b border-slate-100">
+                            <h3 class="font-extrabold text-slate-900 text-lg">Attendance History & Logs</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Review, audit, or modify past attendance records by choosing a date.</p>
+                        </div>
+                        <div class="py-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                            <label class="text-xs font-bold text-slate-600">Select Past Date to Review/Edit:</label>
+                            <input type="date" id="history-date-picker" onchange="jumpToHistoryDate(this.value)"
+                                class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
+                        </div>
+                        <div id="history-summary-box" class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-xs text-slate-600">
+                            <p class="font-medium">Please select a date above to view summary statistics and load records.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MONTHLY ATTENDANCE REPORT TAB -->
+                <section id="tab-monthly" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-slate-100">
+                            <div>
+                                <h3 class="font-extrabold text-slate-900 text-lg">Monthly Attendance Report</h3>
+                                <p class="text-xs text-slate-500 mt-1">Review monthly attendance percentages and identify students below 75%.</p>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <label for="monthly-report-month" class="text-xs font-bold text-slate-600">Select Month:</label>
+                                <input type="month" id="monthly-report-month" onchange="renderMonthlyReport()" class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
+                                <button type="button" onclick="downloadMonthlyReport()" class="bg-[#641C32] hover:bg-[#4E1426] text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                                    <i class="fa-solid fa-download"></i> Download CSV
+                                </button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="bg-[#F8F5F3] p-4 rounded-xl border border-[#eadde1]"><p class="text-[10px] uppercase tracking-wider font-bold text-slate-500">Recorded Class Days</p><p id="monthly-days" class="text-2xl font-extrabold text-[#641C32] mt-1">0</p></div>
+                            <div class="bg-[#F8F5F3] p-4 rounded-xl border border-[#eadde1]"><p class="text-[10px] uppercase tracking-wider font-bold text-slate-500">Students Below 75%</p><p id="monthly-low-count" class="text-2xl font-extrabold text-rose-600 mt-1">0</p></div>
+                            <div class="bg-[#F8F5F3] p-4 rounded-xl border border-[#eadde1]"><p class="text-[10px] uppercase tracking-wider font-bold text-slate-500">Class Average Attendance</p><p id="monthly-average" class="text-2xl font-extrabold text-[#641C32] mt-1">0%</p></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div><h4 class="font-extrabold text-slate-900">Students Below 75% Attendance</h4><p class="text-xs text-slate-500 mt-1">Students requiring attendance attention for the selected month.</p></div>
+                            <span class="text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-100 px-3 py-1.5 rounded-lg">Below 75% threshold</span>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left border-collapse min-w-[520px]">
+                                <thead><tr class="bg-rose-50 border-b border-rose-100 text-rose-800 text-[11px] font-bold uppercase tracking-wider"><th class="py-3 px-4">Roll No</th><th class="py-3 px-4">Student Name</th><th class="py-3 px-4">Present / Total</th><th class="py-3 px-4 text-right">Attendance</th></tr></thead>
+                                <tbody id="monthly-low-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"><tr><td colspan="4" class="py-5 px-4 text-center text-slate-400">No monthly report generated yet.</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <div><h4 class="font-extrabold text-slate-900">Complete Monthly Student Report</h4><p class="text-xs text-slate-500 mt-1">Attendance percentage = Present days ÷ all marked days (Present + Absent + Leave).</p></div>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left border-collapse min-w-[680px]">
+                                <thead><tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-[11px] font-bold uppercase tracking-wider"><th class="py-3 px-4">Roll No</th><th class="py-3 px-4">Student Name</th><th class="py-3 px-4 text-center">Present</th><th class="py-3 px-4 text-center">Absent</th><th class="py-3 px-4 text-center">Leave</th><th class="py-3 px-4 text-center">Total Marked</th><th class="py-3 px-4 text-right">Attendance %</th></tr></thead>
+                                <tbody id="monthly-report-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"><tr><td colspan="7" class="py-5 px-4 text-center text-slate-400">No monthly report generated yet.</td></tr></tbody>
+                            </table>
+                        </div>
+                        <p class="text-[11px] text-slate-500">Only saved daily attendance records are included. Unmarked dates are not counted. Leave is treated as a non-present day in the percentage calculation.</p>
+                    </div>
+                </section>
+
+                <!-- 4. STUDENTS LIST TAB -->
+                <section id="tab-students" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                            <div>
+                                <h3 class="font-extrabold text-slate-900 text-lg">Registered Students Directory (25 Students)</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Political Science • 5th Semester. Verified batch records. Update emails directly below; changes save automatically.</p>
+                            </div>
+                            <button onclick="saveStudentEmails()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-md shadow-emerald-600/20 flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Email Changes
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 mt-6">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-[11px] font-bold uppercase tracking-wider">
+                                        <th class="py-3.5 px-4">Roll No</th>
+                                        <th class="py-3.5 px-4">Student Name</th>
+                                        <th class="py-3.5 px-4">Email Address (Editable)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-directory-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                                    <!-- Injected dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. SETTINGS TAB -->
+                <section id="tab-settings" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                        <div class="pb-6 border-b border-slate-100">
+                            <h3 class="font-extrabold text-slate-900 text-lg">System Settings & EmailJS Configuration</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Configure your EmailJS keys securely for browser-based emailing.</p>
+                        </div>
+
+                        <div class="space-y-4 max-w-2xl">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">EmailJS Public Key</label>
+                                <input type="text" id="cfg-public-key" value="rIrsBxnfzLtViEJLh" placeholder="e.g. rIrsBxnfzLtViEJLh"
+                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">EmailJS Service ID</label>
+                                <input type="text" id="cfg-service-id" value="service_qki18kf" placeholder="e.g. service_qki18kf"
+                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">EmailJS Template ID</label>
+                                <input type="text" id="cfg-template-id" value="template_9m684xb" placeholder="e.g. template_9m684xb"
+                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
+                            </div>
+                            <div class="pt-2">
+                                <button onclick="saveEmailJSConfig()" class="bg-[#641C32] hover:bg-[#4E1426] text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-[#641C32]/20 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save EmailJS Configuration
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50 border border-amber-200 p-5 rounded-2xl text-xs text-amber-900 space-y-2">
+                            <p class="font-bold flex items-center gap-2"><i class="fa-solid fa-circle-info text-amber-600"></i> Production & Security Note:</p>
+                            <p>This frontend demo utilizes local storage and browser-grade authentication. For live enterprise deployment, migrate authentication to a secure backend server and store credentials securely.</p>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <footer class="bg-[#641C32] text-white py-5 px-4 text-center mt-auto">
+            <p class="text-sm font-semibold">© 2026 Newaj Ahmed. All Rights Reserved.</p>
+            <p class="text-xs text-white/75 mt-1">NAMCE Boys Campus | Attendance Management System</p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <!-- ========================================== -->
+    <script>
+        // 25 Students Dataset with verified email IDs extracted from Samarth Batch July 2024 records
+        const initialStudents = [
+            { roll: 3, name: "Abdul Kasem", email: "abdulkashim037@gmail.com" },
+            { roll: 4, name: "Wahid Barbuya", email: "aw0604262@gmail.com" },
+            { roll: 5, name: "Afzal Hussain", email: "afzalclothstore597@gmail.com" },
+            { roll: 6, name: "Alomgir Mondal", email: "aomgirmondel@gmail.com" },
+            { roll: 9, name: "Arif Arman", email: "arifarman200616@gmail.com" },
+            { roll: 13, name: "Gautam Kumar", email: "Kamit3559l.com@gmail.com" },
+            { roll: 14, name: "Iqbal Hussain", email: "hussainrabbi79@gmail.com" },
+            { roll: 15, name: "Kunal Hasnu", email: "hasnuradesh@gmail.com" },
+            { roll: 16, name: "Mahfuz Alom", email: "mahfouzalam555@gmail.com" },
+            { roll: 17, name: "Manab Baruah", email: "baruahmanab04@gmail.com" },
+            { roll: 18, name: "Manjur Ahmed", email: "ummesalma.kpt@gmail.com" },
+            { roll: 19, name: "Masum Suhel", email: "masumsuhel1@gmail.com" },
+            { roll: 20, name: "Mukesh Chauhan", email: "mukeshchauhan986428@gmail.com" },
+            { roll: 21, name: "Newaj Ahmed", email: "newaja35@gmail.com" },
+            { roll: 22, name: "Nur Amin", email: "nuramin9668@gmail.com" },
+            { roll: 23, name: "Nuruz Zaman", email: "nuruz6747@gmail.com" },
+            { roll: 25, name: "Piarul Islam", email: "ipiarul725@gmail.com" },
+            { roll: 29, name: "Ruhal Ahmed", email: "ruhala867@gmail.com" },
+            { roll: 30, name: "Samiul Islam", email: "ikhadimul136@gmail.com" },
+            { roll: 31, name: "Samsul Alom", email: "alomsamsul29011@gmail.com" },
+            { roll: 33, name: "Shaminur Sikdar", email: "shaminursikdar2005@gmail.com" },
+            { roll: 34, name: "Sheikh Farid", email: "sf0070261@gmail.com" },
+            { roll: 35, name: "Thanjit Hasnu", email: "hasnu6001@gmail.com" },
+            { roll: 36, name: "Yahia Ahmed", email: "habibur60296@gmail.com" },
+            { roll: 37, name: "Zaid Hussain", email: "zh3349672@gmail.com" }
+        ].sort((a, b) => a.roll - b.roll);
+
+        // State Management
+        let students = JSON.parse(localStorage.getItem('namce_students')) || initialStudents;
+        let attendanceDB = JSON.parse(localStorage.getItem('namce_attendance')) || {};
+        let emailConfig = JSON.parse(localStorage.getItem('namce_emailjs')) || { publicKey: 'rIrsBxnfzLtViEJLh', serviceId: 'service_qki18kf', templateId: 'template_9m684xb' };
+
+        // Initialization on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            const todayStr = getLocalDateString(new Date());
+            document.getElementById('attendance-date').value = todayStr;
+            document.getElementById('monthly-report-month').value = todayStr.slice(0, 7);
+            document.getElementById('dash-current-date').innerText = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+            // Populate EmailJS settings inputs
+            document.getElementById('cfg-public-key').value = emailConfig.publicKey;
+            document.getElementById('cfg-service-id').value = emailConfig.serviceId;
+            document.getElementById('cfg-template-id').value = emailConfig.templateId;
+
+            // Check login state
+            if (localStorage.getItem('namce_logged_in') === 'true') {
+                showApp();
+            }
+            renderStudentsDirectory();
+            loadAttendanceForDate();
+            updateDashboardStats();
+        });
+
+        function getLocalDateString(date) {
+            const offset = date.getTimezoneOffset();
+            const adjustedDate = new Date(date.getTime() - (offset*60*1000));
+            return adjustedDate.toISOString().split('T')[0];
+        }
+
+        // Authentication Handler
+        function handleLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('admin-password').value;
+            if (pass === 'Newaj@2005') {
+                localStorage.setItem('namce_logged_in', 'true');
+                showApp();
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('namce_logged_in');
+            document.getElementById('app-view').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('admin-password').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+        }
+
+        function showApp() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('app-view').classList.remove('hidden');
+            updateDashboardStats();
+            loadAttendanceForDate();
+        }
+
+        // Navigation Tabs
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-[#641C32]', 'text-white', 'shadow-md', 'shadow-[#641C32]/20');
+                el.classList.add('text-slate-600', 'hover:bg-slate-50');
+            });
+            
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+            activeBtn.classList.add('bg-[#641C32]', 'text-white', 'shadow-md', 'shadow-[#641C32]/20');
+
+            if(tabId === 'dashboard') updateDashboardStats();
+            if(tabId === 'monthly') renderMonthlyReport();
+        }
+
+        // Students Directory Render & Save
+        function renderStudentsDirectory() {
+            const tbody = document.getElementById('students-directory-body');
+            tbody.innerHTML = '';
+            students.forEach((st, idx) => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3 px-4 font-bold text-slate-900">${st.roll}</td>
+                        <td class="py-3 px-4 font-semibold text-slate-800">${st.name}</td>
+                        <td class="py-3 px-4">
+                            <input type="email" value="${st.email || ''}" placeholder="Enter student email address..." 
+                                onchange="updateStudentEmail(${st.roll}, this.value)"
+                                class="w-full max-w-md bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateStudentEmail(roll, val) {
+            const st = students.find(s => s.roll === roll);
+            if(st) st.email = val.trim();
+        }
+
+        function saveStudentEmails() {
+            localStorage.setItem('namce_students', JSON.stringify(students));
+            alert('Student email directory updated and saved successfully!');
+            renderStudentsDirectory();
+        }
+
+        // Daily Attendance Management with Individual Send Button
+        function loadAttendanceForDate() {
+            const dateStr = document.getElementById('attendance-date').value;
+            const tbody = document.getElementById('attendance-table-body');
+            const dayData = attendanceDB[dateStr] || {};
+            
+            tbody.innerHTML = '';
+            students.forEach(st => {
+                const status = dayData[st.roll] || 'Present'; // Default to Present
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3 px-4 font-bold text-slate-900">${st.roll}</td>
+                        <td class="py-3 px-4 font-semibold text-slate-800">${st.name}</td>
+                        <td class="py-3 px-4 text-slate-500">${st.email || '<span class="text-amber-500 italic">No email set</span>'}</td>
+                        <td class="py-3 px-4">
+                            <div class="flex items-center justify-center gap-3">
+                                <label class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 cursor-pointer">
+                                    <input type="radio" name="att_${st.roll}" value="Present" ${status === 'Present' ? 'checked' : ''} class="text-emerald-600 focus:ring-emerald-500"> Present
+                                </label>
+                                <label class="inline-flex items-center gap-1 text-xs font-bold text-rose-600 cursor-pointer">
+                                    <input type="radio" name="att_${st.roll}" value="Absent" ${status === 'Absent' ? 'checked' : ''} class="text-rose-600 focus:ring-rose-500"> Absent
+                                </label>
+                                <label class="inline-flex items-center gap-1 text-xs font-bold text-amber-600 cursor-pointer">
+                                    <input type="radio" name="att_${st.roll}" value="Leave" ${status === 'Leave' ? 'checked' : ''} class="text-amber-600 focus:ring-amber-500"> Leave
+                                </label>
+                            </div>
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <button type="button" onclick="sendIndividualStudentEmail(${st.roll})" class="bg-[#F8F1F3] hover:bg-[#F1E4E8] text-[#641C32] font-bold text-[11px] px-3.5 py-2 rounded-xl transition shadow-sm flex items-center justify-center gap-1.5 mx-auto">
+                                <i class="fa-solid fa-paper-plane text-xs"></i> Send Email
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Send Email to a Single Chosen Student
+        async function sendIndividualStudentEmail(roll) {
+            const dateStr = document.getElementById('attendance-date').value;
+            if(!dateStr) {
+                alert('Please select a date.');
+                return;
+            }
+
+            const st = students.find(s => s.roll === roll);
+            if(!st || !st.email || !st.email.includes('@')) {
+                alert(`Student ${st ? st.name : ''} does not have a valid email address. Please update it in the Students List tab.`);
+                switchTab('students');
+                return;
+            }
+
+            const selectedRadio = document.querySelector(`input[name="att_${roll}"]:checked`);
+            const status = selectedRadio ? selectedRadio.value : (attendanceDB[dateStr] && attendanceDB[dateStr][roll] ? attendanceDB[dateStr][roll] : 'Present');
+
+            if(!emailConfig.publicKey || !emailConfig.serviceId || !emailConfig.templateId) {
+                alert('EmailJS credentials are not configured! Please configure them in the Settings tab.');
+                switchTab('settings');
+                return;
+            }
+
+            const confirmSend = confirm(`Send attendance email to ${st.name} (${st.email}) for date ${dateStr} with status: ${status}?`);
+            if(!confirmSend) return;
+
+            emailjs.init(emailConfig.publicKey);
+
+            const templateParams = {
+                to_email: st.email,
+                to_name: st.name,
+                roll_no: st.roll,
+                college_name: "NAMCE-BOYS CAMPUS",
+                department: "Political Science",
+                semester: "5th Semester",
+                attendance_date: dateStr,
+                attendance_status: status
+            };
+
+            try {
+                await emailjs.send(emailConfig.serviceId, emailConfig.templateId, templateParams);
+                alert(`Attendance email successfully sent to ${st.name} (${st.email})!`);
+            } catch (err) {
+                console.error("EmailJS Error:", err);
+                alert(`Failed to send email to ${st.name}: ${err.text || err.message || 'Unknown error'}`);
+            }
+        }
+
+        // Send to All Students (Sequential rate-limited loop)
+        async function triggerSendToAll() {
+            const dateStr = document.getElementById('attendance-date').value;
+            if(!dateStr) {
+                alert('Please select a date.');
+                return;
+            }
+
+            const dayData = attendanceDB[dateStr];
+            if(!dayData) {
+                alert(`No saved attendance records found for ${dateStr}. Please click "Save Attendance Record" before sending to all.`);
+                return;
+            }
+
+            const missingEmailStudents = students.filter(st => !st.email || !st.email.includes('@'));
+            if(missingEmailStudents.length > 0) {
+                alert(`Cannot send to all! ${missingEmailStudents.length} student(s) are missing valid email addresses.`);
+                switchTab('students');
+                return;
+            }
+
+            const confirmSend = confirm(`You are about to send attendance emails to ALL 25 students for date ${dateStr}.\n\nDo you want to proceed?`);
+            if(!confirmSend) return;
+
+            if(!emailConfig.publicKey || !emailConfig.serviceId || !emailConfig.templateId) {
+                alert('EmailJS credentials are not configured! Please configure them in the Settings tab.');
+                switchTab('settings');
+                return;
+            }
+
+            emailjs.init(emailConfig.publicKey);
+
+            const progressBox = document.getElementById('email-progress-box');
+            const progressBar = document.getElementById('email-progress-bar');
+            const progressStatus = document.getElementById('email-progress-status-text');
+            const progressCounter = document.getElementById('email-progress-counter');
+            const logBox = document.getElementById('email-result-log');
+            const logContent = document.getElementById('email-log-content');
+
+            progressBox.classList.remove('hidden');
+            logBox.classList.remove('hidden');
+            logContent.innerHTML = '';
+            progressBar.style.width = '0%';
+
+            let successCount = 0;
+            let failCount = 0;
+
+            for(let i = 0; i < students.length; i++) {
+                const st = students[i];
+                const currentNum = i + 1;
+                
+                progressStatus.innerText = `Sending email to ${st.name} (Roll ${st.roll})...`;
+                progressCounter.innerText = `${currentNum} of ${students.length}`;
+                progressBar.style.width = `${Math.round((currentNum / students.length) * 100)}%`;
+
+                const status = dayData[st.roll] || 'Present';
+
+                const templateParams = {
+                    to_email: st.email,
+                    to_name: st.name,
+                    roll_no: st.roll,
+                    college_name: "NAMCE-BOYS CAMPUS",
+                    department: "Political Science",
+                    semester: "5th Semester",
+                    attendance_date: dateStr,
+                    attendance_status: status
+                };
+
+                try {
+                    await emailjs.send(emailConfig.serviceId, emailConfig.templateId, templateParams);
+                    successCount++;
+                    logContent.innerHTML += `<div class="text-emerald-400">[SUCCESS] Sent to ${st.name} (${st.email})</div>`;
+                } catch (err) {
+                    failCount++;
+                    console.error("EmailJS Error:", err);
+                    logContent.innerHTML += `<div class="text-rose-400">[FAILED] Could not send to ${st.name}: ${err.text || err.message || 'Unknown error'}</div>`;
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 1200));
+            }
+
+            progressStatus.innerText = `Dispatch complete! Success: ${successCount}, Failed: ${failCount}`;
+            logContent.innerHTML += `<div class="text-rose-300 font-bold mt-2">Finished sending to all. Successful: ${successCount}, Failed: ${failCount}</div>`;
+        }
+
+        function markAll(action) {
+            students.forEach(st => {
+                if(action === 'Present') {
+                    const radio = document.querySelector(`input[name="att_${st.roll}"][value="Present"]`);
+                    if(radio) radio.checked = true;
+                } else {
+                    const radios = document.querySelectorAll(`input[name="att_${st.roll}"]`);
+                    radios.forEach(r => r.checked = false);
+                }
+            });
+        }
+
+        function saveAttendance(e) {
+            e.preventDefault();
+            const dateStr = document.getElementById('attendance-date').value;
+            if(!dateStr) {
+                alert('Please select a valid date.');
+                return;
+            }
+
+            const dayRecord = {};
+            let unassignedCount = 0;
+
+            students.forEach(st => {
+                const selected = document.querySelector(`input[name="att_${st.roll}"]:checked`);
+                if(!selected) {
+                    unassignedCount++;
+                } else {
+                    dayRecord[st.roll] = selected.value;
+                }
+            });
+
+            if(unassignedCount > 0) {
+                alert(`Submission prevented! ${unassignedCount} student(s) have not been marked. Please ensure every student is marked Present, Absent, or Leave.`);
+                return;
+            }
+
+            attendanceDB[dateStr] = dayRecord;
+            localStorage.setItem('namce_attendance', JSON.stringify(attendanceDB));
+            updateDashboardStats();
+            renderMonthlyReport();
+            alert(`Attendance for ${dateStr} saved successfully!`);
+        }
+
+        // History Jump
+        function jumpToHistoryDate(dateStr) {
+            if(!dateStr) return;
+            const summaryBox = document.getElementById('history-summary-box');
+            const dayData = attendanceDB[dateStr];
+            
+            if(!dayData) {
+                summaryBox.innerHTML = `<p class="text-rose-600 font-bold">No attendance records found for date: ${dateStr}. Go to Daily Attendance to record.</p>`;
+                return;
+            }
+
+            let p = 0, a = 0, l = 0;
+            Object.values(dayData).forEach(val => {
+                if(val === 'Present') p++;
+                else if(val === 'Absent') a++;
+                else if(val === 'Leave') l++;
+            });
+            const pct = Math.round((p / 25) * 100);
+
+            summaryBox.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900">Attendance Summary for ${dateStr}</span>
+                        <button onclick="document.getElementById('attendance-date').value='${dateStr}'; switchTab('daily');" class="bg-[#641C32] text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#4E1426] transition">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit This Date
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">PRESENT</span><strong class="text-emerald-600 text-base">${p}</strong></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">ABSENT</span><strong class="text-rose-600 text-base">${a}</strong></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">LEAVE</span><strong class="text-amber-600 text-base">${l}</strong></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">PERCENTAGE</span><strong class="text-[#641C32] text-base">${pct}%</strong></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Monthly attendance report and below-75% monitoring
+        function getMonthlyAttendanceData() {
+            const monthValue = document.getElementById('monthly-report-month').value;
+            if (!monthValue) return { rows: [], dates: [], average: 0, low: [] };
+
+            const dates = Object.keys(attendanceDB)
+                .filter(date => date.startsWith(monthValue) && attendanceDB[date] && typeof attendanceDB[date] === 'object')
+                .sort();
+
+            const rows = students.map(st => {
+                let present = 0, absent = 0, leave = 0;
+                dates.forEach(date => {
+                    const status = attendanceDB[date][st.roll];
+                    if (status === 'Present') present++;
+                    else if (status === 'Absent') absent++;
+                    else if (status === 'Leave') leave++;
+                });
+                const total = present + absent + leave;
+                const percentage = total ? (present / total) * 100 : null;
+                return { roll: st.roll, name: st.name, present, absent, leave, total, percentage };
+            });
+            const eligible = rows.filter(row => row.total > 0);
+            const average = eligible.length ? eligible.reduce((sum, row) => sum + row.percentage, 0) / eligible.length : 0;
+            return { rows, dates, average, low: rows.filter(row => row.total > 0 && row.percentage < 75) };
+        }
+
+        function renderMonthlyReport() {
+            const lowBody = document.getElementById('monthly-low-body');
+            const reportBody = document.getElementById('monthly-report-body');
+            if (!lowBody || !reportBody) return;
+
+            const report = getMonthlyAttendanceData();
+            document.getElementById('monthly-days').textContent = report.dates.length;
+            document.getElementById('monthly-low-count').textContent = report.low.length;
+            document.getElementById('monthly-average').textContent = `${report.average.toFixed(1)}%`;
+
+            if (!report.dates.length) {
+                lowBody.innerHTML = '<tr><td colspan="4" class="py-5 px-4 text-center text-slate-400">No saved attendance records found for this month.</td></tr>';
+                reportBody.innerHTML = '<tr><td colspan="7" class="py-5 px-4 text-center text-slate-400">No saved attendance records found for this month.</td></tr>';
+                return;
+            }
+
+            lowBody.innerHTML = report.low.length ? report.low
+                .sort((a, b) => a.percentage - b.percentage)
+                .map(row => `<tr class="bg-rose-50/60 hover:bg-rose-50"><td class="py-3 px-4 font-bold">${row.roll}</td><td class="py-3 px-4 font-semibold">${row.name}</td><td class="py-3 px-4">${row.present} / ${row.total}</td><td class="py-3 px-4 text-right"><span class="inline-flex px-2.5 py-1 rounded-lg bg-rose-100 text-rose-700 font-extrabold">${row.percentage.toFixed(1)}%</span></td></tr>`).join('')
+                : '<tr><td colspan="4" class="py-5 px-4 text-center text-emerald-700 font-semibold">No students are below 75% for this month.</td></tr>';
+
+            reportBody.innerHTML = report.rows.map(row => {
+                const pct = row.total ? row.percentage : null;
+                const lowClass = pct !== null && pct < 75 ? 'text-rose-700 font-extrabold' : 'text-emerald-700 font-bold';
+                return `<tr class="hover:bg-slate-50 ${pct !== null && pct < 75 ? 'bg-rose-50/30' : ''}">
+                    <td class="py-3 px-4 font-bold">${row.roll}</td><td class="py-3 px-4 font-semibold">${row.name}</td>
+                    <td class="py-3 px-4 text-center text-emerald-700">${row.present}</td><td class="py-3 px-4 text-center text-rose-600">${row.absent}</td>
+                    <td class="py-3 px-4 text-center text-amber-600">${row.leave}</td><td class="py-3 px-4 text-center">${row.total}</td>
+                    <td class="py-3 px-4 text-right ${lowClass}">${pct === null ? 'N/A' : `${pct.toFixed(1)}%`}</td></tr>`;
+            }).join('');
+        }
+
+        function downloadMonthlyReport() {
+            const monthValue = document.getElementById('monthly-report-month').value;
+            if (!monthValue) { alert('Please select a month first.'); return; }
+            const report = getMonthlyAttendanceData();
+            if (!report.dates.length) { alert('No saved attendance records are available for the selected month.'); return; }
+
+            const lines = [
+                ['Month', monthValue],
+                ['Recorded Class Days', report.dates.length],
+                [],
+                ['Roll No', 'Student Name', 'Present', 'Absent', 'Leave', 'Total Marked', 'Attendance Percentage', 'Below 75%']
+            ];
+            report.rows.forEach(row => lines.push([row.roll, row.name, row.present, row.absent, row.leave, row.total, row.total ? `${row.percentage.toFixed(1)}%` : 'N/A', row.total && row.percentage < 75 ? 'YES' : 'NO']));
+            const csv = lines.map(line => line.map(value => {
+                const text = String(value ?? '');
+                return `"${text.replace(/"/g, '""')}"`;
+            }).join(',')).join('\r\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `NAMCE_Monthly_Attendance_${monthValue}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        // Dashboard Stats calculation
+        function updateDashboardStats() {
+            const todayStr = getLocalDateString(new Date());
+            const dayData = attendanceDB[todayStr] || {};
+            let p = 0, a = 0, l = 0;
+            
+            students.forEach(st => {
+                const status = dayData[st.roll];
+                if(status === 'Present') p++;
+                else if(status === 'Absent') a++;
+                else if(status === 'Leave') l++;
+            });
+
+            const totalRecorded = p + a + l;
+            const pct = totalRecorded > 0 ? Math.round((p / 25) * 100) : 0;
+
+            document.getElementById('stat-present').innerText = p;
+            document.getElementById('stat-absent').innerText = a;
+            document.getElementById('stat-percentage').innerText = `${pct}%`;
+        }
+
+        // Settings Save
+        function saveEmailJSConfig() {
+            emailConfig.publicKey = document.getElementById('cfg-public-key').value.trim();
+            emailConfig.serviceId = document.getElementById('cfg-service-id').value.trim();
+            emailConfig.templateId = document.getElementById('cfg-template-id').value.trim();
+            
+            localStorage.setItem('namce_emailjs', JSON.stringify(emailConfig));
+            alert('EmailJS settings saved successfully!');
+        }
+    </script>
+</body>
+</html>
