@@ -10,18 +10,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        :root { color-scheme: light; }
+        body { background-color: #F8F5F3; }
+        button, input, select { -webkit-tap-highlight-color: transparent; }
+        button:focus-visible, input:focus-visible, select:focus-visible {
+            outline: 2px solid #8B304B;
+            outline-offset: 2px;
+        }
+        @media (max-width: 640px) {
+            #login-view > div { padding: 1.5rem; }
+            #app-view header .max-w-7xl { min-height: 4.5rem; height: auto; padding-top: .65rem; padding-bottom: .65rem; }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-[#F8F5F3] text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
     <!-- ========================================== -->
     <!-- LOGIN VIEW -->
     <!-- ========================================== -->
-    <div id="login-view" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-50 p-4">
+    <div id="login-view" class="fixed inset-0 bg-[#3F1020] flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-100">
             <div class="text-center mb-8">
-                <div class="bg-blue-600 text-white w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl font-bold shadow-lg shadow-blue-500/30">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
+                <img src="namce-logo.jpg" alt="Nazir Ajmal Memorial College of Education official logo"
+                    class="w-full max-w-[300px] h-auto object-contain mx-auto mb-6" loading="eager">
                 <h1 class="text-2xl font-extrabold text-slate-900">NAMCE-BOYS CAMPUS</h1>
                 <p class="text-sm font-medium text-slate-500 mt-1">Political Science | 5th Semester</p>
             </div>
@@ -34,13 +46,13 @@
                             <i class="fa-solid fa-lock"></i>
                         </span>
                         <input type="password" id="admin-password" required placeholder="Enter admin password"
-                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition">
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B304B] focus:bg-white transition">
                     </div>
                 </div>
                 <div id="login-error" class="hidden text-xs font-semibold text-rose-500 bg-rose-50 p-3 rounded-lg border border-rose-100 flex items-center gap-2">
                     <i class="fa-solid fa-circle-exclamation"></i> Incorrect password. Please try again.
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-lg shadow-blue-600/30 transition duration-200 flex items-center justify-center gap-2">
+                <button type="submit" class="w-full bg-[#641C32] hover:bg-[#4E1426] text-white font-semibold py-3 rounded-xl shadow-lg shadow-[#641C32]/20 transition duration-200 flex items-center justify-center gap-2">
                     <span>Admin Login</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
                 </button>
             </form>
@@ -58,9 +70,7 @@
         <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div class="bg-blue-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
-                        <i class="fa-solid fa-landmark text-sm"></i>
-                    </div>
+                    <img src="namce-logo.jpg" alt="NAMCE official college logo" class="w-[112px] sm:w-[150px] h-auto object-contain">
                     <div>
                         <h2 class="font-bold text-slate-900 leading-tight">NAMCE-BOYS CAMPUS</h2>
                         <p class="text-xs font-medium text-slate-500">Political Science • 5th Semester</p>
@@ -68,7 +78,7 @@
                 </div>
                 <div class="flex items-center gap-4">
                     <div class="hidden sm:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600">
-                        <i class="fa-solid fa-user-shield text-blue-600"></i> Admin Session
+                        <i class="fa-solid fa-user-shield text-[#641C32]"></i> Admin Session
                     </div>
                     <button onclick="handleLogout()" class="bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-600 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
                         <i class="fa-solid fa-right-from-bracket"></i> Logout
@@ -81,7 +91,7 @@
             <!-- Sidebar Navigation -->
             <aside class="lg:col-span-1">
                 <nav class="space-y-1.5 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition tab-btn bg-blue-600 text-white shadow-md shadow-blue-600/20">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition tab-btn bg-[#641C32] text-white shadow-md shadow-[#641C32]/20">
                         <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
                     </button>
                     <button onclick="switchTab('daily')" id="nav-daily" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
@@ -89,6 +99,9 @@
                     </button>
                     <button onclick="switchTab('history')" id="nav-history" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
                         <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> Attendance History
+                    </button>
+                    <button onclick="switchTab('monthly')" id="nav-monthly" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
+                        <i class="fa-solid fa-chart-column w-5 text-center"></i> Monthly Report
                     </button>
                     <button onclick="switchTab('students')" id="nav-students" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition tab-btn">
                         <i class="fa-solid fa-users w-5 text-center"></i> Students List
@@ -104,14 +117,14 @@
 
                 <!-- 1. DASHBOARD TAB -->
                 <section id="tab-dashboard" class="tab-content space-y-6">
-                    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-blue-600/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div class="bg-gradient-to-r from-[#641C32] to-[#8B304B] rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-[#641C32]/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
-                            <span class="bg-blue-500/30 text-blue-100 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-wider">Live System Overview</span>
+                            <span class="bg-white/15 text-rose-50 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-wider">Live System Overview</span>
                             <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Welcome Back, Admin</h2>
-                            <p class="text-blue-100 text-xs sm:text-sm mt-1">Political Science 5th Semester Management Console.</p>
+                            <p class="text-rose-50 text-xs sm:text-sm mt-1">Political Science 5th Semester Management Console.</p>
                         </div>
                         <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-right">
-                            <p class="text-xs text-blue-200 font-medium">Today's Date</p>
+                            <p class="text-xs text-rose-100 font-medium">Today's Date</p>
                             <p id="dash-current-date" class="text-sm font-bold mt-0.5"></p>
                         </div>
                     </div>
@@ -121,10 +134,10 @@
                         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Total Enrolled</span>
-                                <div class="bg-blue-50 text-blue-600 w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-users"></i></div>
+                                <div class="bg-[#F8F1F3] text-[#641C32] w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-users"></i></div>
                             </div>
                             <h3 class="text-3xl font-extrabold text-slate-900 mt-3" id="stat-total">25</h3>
-                            <p class="text-[11px] font-semibold text-slate-600 mt-1">Fixed Class Strength</p>
+                            <p class="text-[11px] font-semibold text-slate-600 mt-1">Registered Class Strength</p>
                         </div>
                         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between">
@@ -156,9 +169,9 @@
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div>
                             <h4 class="font-bold text-slate-900 text-base">Ready to take today's attendance?</h4>
-                            <p class="text-xs text-slate-500 mt-0.5">Quickly record or update attendance for all 25 students.</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Quickly record or update attendance for all registered students.</p>
                         </div>
-                        <button onclick="switchTab('daily')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-3 rounded-xl shadow-md shadow-blue-600/20 transition flex items-center gap-2">
+                        <button onclick="switchTab('daily')" class="bg-[#641C32] hover:bg-[#4E1426] text-white font-bold text-xs px-5 py-3 rounded-xl shadow-md shadow-[#641C32]/20 transition flex items-center gap-2">
                             <span>Open Daily Attendance</span> <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
@@ -175,7 +188,7 @@
                             <div class="flex items-center gap-3">
                                 <label class="text-xs font-bold text-slate-600">Select Date:</label>
                                 <input type="date" id="attendance-date" onchange="loadAttendanceForDate()"
-                                    class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                    class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
                             </div>
                         </div>
 
@@ -215,23 +228,23 @@
 
                             <!-- Bottom Action Bar: Save & Send to All -->
                             <div class="mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
-                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-blue-600/20 transition flex items-center gap-2">
+                                <button type="submit" class="bg-[#641C32] hover:bg-[#4E1426] text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-[#641C32]/20 transition flex items-center gap-2">
                                     <i class="fa-solid fa-floppy-disk"></i> Save Attendance Record
                                 </button>
-                                <button type="button" onclick="triggerSendToAll()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-indigo-600/20 transition flex items-center gap-2">
+                                <button type="button" onclick="triggerSendToAll()" class="bg-[#8B304B] hover:bg-[#641C32] text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-[#641C32]/20 transition flex items-center gap-2">
                                     <i class="fa-solid fa-paper-plane"></i> Send to All Students
                                 </button>
                             </div>
                         </form>
 
                         <!-- Email Sending Progress Box for Send to All -->
-                        <div id="email-progress-box" class="hidden bg-blue-50 border border-blue-100 p-5 rounded-2xl space-y-3 mt-4">
-                            <div class="flex items-center justify-between text-xs font-bold text-blue-900">
+                        <div id="email-progress-box" class="hidden bg-[#F8F1F3] border border-blue-100 p-5 rounded-2xl space-y-3 mt-4">
+                            <div class="flex items-center justify-between text-xs font-bold text-[#4E1426]">
                                 <span id="email-progress-status-text">Preparing emails...</span>
                                 <span id="email-progress-counter">0 / 25</span>
                             </div>
-                            <div class="w-full bg-blue-200 rounded-full h-2.5 overflow-hidden">
-                                <div id="email-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            <div class="w-full bg-[#E8D1D9] rounded-full h-2.5 overflow-hidden">
+                                <div id="email-progress-bar" class="bg-[#641C32] h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
                             </div>
                         </div>
 
@@ -253,11 +266,59 @@
                         <div class="py-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
                             <label class="text-xs font-bold text-slate-600">Select Past Date to Review/Edit:</label>
                             <input type="date" id="history-date-picker" onchange="jumpToHistoryDate(this.value)"
-                                class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
                         </div>
                         <div id="history-summary-box" class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-xs text-slate-600">
                             <p class="font-medium">Please select a date above to view summary statistics and load records.</p>
                         </div>
+                    </div>
+                </section>
+
+                <!-- MONTHLY ATTENDANCE REPORT TAB -->
+                <section id="tab-monthly" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-slate-100">
+                            <div>
+                                <h3 class="font-extrabold text-slate-900 text-lg">Monthly Attendance Report</h3>
+                                <p class="text-xs text-slate-500 mt-1">Review monthly attendance percentages and identify students below 75%.</p>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <label for="monthly-report-month" class="text-xs font-bold text-slate-600">Select Month:</label>
+                                <input type="month" id="monthly-report-month" onchange="renderMonthlyReport()" class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
+                                <button type="button" onclick="downloadMonthlyReport()" class="bg-[#641C32] hover:bg-[#4E1426] text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                                    <i class="fa-solid fa-download"></i> Download CSV
+                                </button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="bg-[#F8F5F3] p-4 rounded-xl border border-[#eadde1]"><p class="text-[10px] uppercase tracking-wider font-bold text-slate-500">Recorded Class Days</p><p id="monthly-days" class="text-2xl font-extrabold text-[#641C32] mt-1">0</p></div>
+                            <div class="bg-[#F8F5F3] p-4 rounded-xl border border-[#eadde1]"><p class="text-[10px] uppercase tracking-wider font-bold text-slate-500">Students Below 75%</p><p id="monthly-low-count" class="text-2xl font-extrabold text-rose-600 mt-1">0</p></div>
+                            <div class="bg-[#F8F5F3] p-4 rounded-xl border border-[#eadde1]"><p class="text-[10px] uppercase tracking-wider font-bold text-slate-500">Class Average Attendance</p><p id="monthly-average" class="text-2xl font-extrabold text-[#641C32] mt-1">0%</p></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div><h4 class="font-extrabold text-slate-900">Students Below 75% Attendance</h4><p class="text-xs text-slate-500 mt-1">Students requiring attendance attention for the selected month.</p></div>
+                            <span class="text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-100 px-3 py-1.5 rounded-lg">Below 75% threshold</span>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left border-collapse min-w-[520px]">
+                                <thead><tr class="bg-rose-50 border-b border-rose-100 text-rose-800 text-[11px] font-bold uppercase tracking-wider"><th class="py-3 px-4">Roll No</th><th class="py-3 px-4">Student Name</th><th class="py-3 px-4">Present / Total</th><th class="py-3 px-4 text-right">Attendance</th></tr></thead>
+                                <tbody id="monthly-low-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"><tr><td colspan="4" class="py-5 px-4 text-center text-slate-400">No monthly report generated yet.</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <div><h4 class="font-extrabold text-slate-900">Complete Monthly Student Report</h4><p class="text-xs text-slate-500 mt-1">Attendance percentage = Present days ÷ all marked days (Present + Absent + Leave).</p></div>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left border-collapse min-w-[680px]">
+                                <thead><tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-[11px] font-bold uppercase tracking-wider"><th class="py-3 px-4">Roll No</th><th class="py-3 px-4">Student Name</th><th class="py-3 px-4 text-center">Present</th><th class="py-3 px-4 text-center">Absent</th><th class="py-3 px-4 text-center">Leave</th><th class="py-3 px-4 text-center">Total Marked</th><th class="py-3 px-4 text-right">Attendance %</th></tr></thead>
+                                <tbody id="monthly-report-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"><tr><td colspan="7" class="py-5 px-4 text-center text-slate-400">No monthly report generated yet.</td></tr></tbody>
+                            </table>
+                        </div>
+                        <p class="text-[11px] text-slate-500">Only saved daily attendance records are included. Unmarked dates are not counted. Leave is treated as a non-present day in the percentage calculation.</p>
                     </div>
                 </section>
 
@@ -303,20 +364,20 @@
                             <div>
                                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">EmailJS Public Key</label>
                                 <input type="text" id="cfg-public-key" value="rIrsBxnfzLtViEJLh" placeholder="e.g. rIrsBxnfzLtViEJLh"
-                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">EmailJS Service ID</label>
                                 <input type="text" id="cfg-service-id" value="service_qki18kf" placeholder="e.g. service_qki18kf"
-                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">EmailJS Template ID</label>
                                 <input type="text" id="cfg-template-id" value="template_9m684xb" placeholder="e.g. template_9m684xb"
-                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                    class="w-full bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
                             </div>
                             <div class="pt-2">
-                                <button onclick="saveEmailJSConfig()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-blue-600/20 transition flex items-center gap-2">
+                                <button onclick="saveEmailJSConfig()" class="bg-[#641C32] hover:bg-[#4E1426] text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-[#641C32]/20 transition flex items-center gap-2">
                                     <i class="fa-solid fa-floppy-disk"></i> Save EmailJS Configuration
                                 </button>
                             </div>
@@ -331,6 +392,11 @@
 
             </main>
         </div>
+
+        <footer class="bg-[#641C32] text-white py-5 px-4 text-center mt-auto">
+            <p class="text-sm font-semibold">© 2026 Newaj Ahmed. All Rights Reserved.</p>
+            <p class="text-xs text-white/75 mt-1">NAMCE Boys Campus | Attendance Management System</p>
+        </footer>
     </div>
 
     <!-- ========================================== -->
@@ -375,6 +441,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             const todayStr = getLocalDateString(new Date());
             document.getElementById('attendance-date').value = todayStr;
+            document.getElementById('monthly-report-month').value = todayStr.slice(0, 7);
             document.getElementById('dash-current-date').innerText = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 
             // Populate EmailJS settings inputs
@@ -428,16 +495,17 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20');
+                el.classList.remove('bg-[#641C32]', 'text-white', 'shadow-md', 'shadow-[#641C32]/20');
                 el.classList.add('text-slate-600', 'hover:bg-slate-50');
             });
             
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             const activeBtn = document.getElementById(`nav-${tabId}`);
             activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
-            activeBtn.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20');
+            activeBtn.classList.add('bg-[#641C32]', 'text-white', 'shadow-md', 'shadow-[#641C32]/20');
 
             if(tabId === 'dashboard') updateDashboardStats();
+            if(tabId === 'monthly') renderMonthlyReport();
         }
 
         // Students Directory Render & Save
@@ -452,7 +520,7 @@
                         <td class="py-3 px-4">
                             <input type="email" value="${st.email || ''}" placeholder="Enter student email address..." 
                                 onchange="updateStudentEmail(${st.roll}, this.value)"
-                                class="w-full max-w-md bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                class="w-full max-w-md bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#8B304B]">
                         </td>
                     </tr>
                 `;
@@ -498,7 +566,7 @@
                             </div>
                         </td>
                         <td class="py-3 px-4 text-center">
-                            <button type="button" onclick="sendIndividualStudentEmail(${st.roll})" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-[11px] px-3.5 py-2 rounded-xl transition shadow-sm flex items-center justify-center gap-1.5 mx-auto">
+                            <button type="button" onclick="sendIndividualStudentEmail(${st.roll})" class="bg-[#F8F1F3] hover:bg-[#F1E4E8] text-[#641C32] font-bold text-[11px] px-3.5 py-2 rounded-xl transition shadow-sm flex items-center justify-center gap-1.5 mx-auto">
                                 <i class="fa-solid fa-paper-plane text-xs"></i> Send Email
                             </button>
                         </td>
@@ -638,7 +706,7 @@
             }
 
             progressStatus.innerText = `Dispatch complete! Success: ${successCount}, Failed: ${failCount}`;
-            logContent.innerHTML += `<div class="text-blue-400 font-bold mt-2">Finished sending to all. Successful: ${successCount}, Failed: ${failCount}</div>`;
+            logContent.innerHTML += `<div class="text-rose-300 font-bold mt-2">Finished sending to all. Successful: ${successCount}, Failed: ${failCount}</div>`;
         }
 
         function markAll(action) {
@@ -681,6 +749,7 @@
             attendanceDB[dateStr] = dayRecord;
             localStorage.setItem('namce_attendance', JSON.stringify(attendanceDB));
             updateDashboardStats();
+            renderMonthlyReport();
             alert(`Attendance for ${dateStr} saved successfully!`);
         }
 
@@ -707,7 +776,7 @@
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
                         <span class="font-bold text-slate-900">Attendance Summary for ${dateStr}</span>
-                        <button onclick="document.getElementById('attendance-date').value='${dateStr}'; switchTab('daily');" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-700 transition">
+                        <button onclick="document.getElementById('attendance-date').value='${dateStr}'; switchTab('daily');" class="bg-[#641C32] text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#4E1426] transition">
                             <i class="fa-solid fa-pen-to-square"></i> Edit This Date
                         </button>
                     </div>
@@ -715,10 +784,96 @@
                         <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">PRESENT</span><strong class="text-emerald-600 text-base">${p}</strong></div>
                         <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">ABSENT</span><strong class="text-rose-600 text-base">${a}</strong></div>
                         <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">LEAVE</span><strong class="text-amber-600 text-base">${l}</strong></div>
-                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">PERCENTAGE</span><strong class="text-blue-600 text-base">${pct}%</strong></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="text-slate-400 block text-[10px]">PERCENTAGE</span><strong class="text-[#641C32] text-base">${pct}%</strong></div>
                     </div>
                 </div>
             `;
+        }
+
+        // Monthly attendance report and below-75% monitoring
+        function getMonthlyAttendanceData() {
+            const monthValue = document.getElementById('monthly-report-month').value;
+            if (!monthValue) return { rows: [], dates: [], average: 0, low: [] };
+
+            const dates = Object.keys(attendanceDB)
+                .filter(date => date.startsWith(monthValue) && attendanceDB[date] && typeof attendanceDB[date] === 'object')
+                .sort();
+
+            const rows = students.map(st => {
+                let present = 0, absent = 0, leave = 0;
+                dates.forEach(date => {
+                    const status = attendanceDB[date][st.roll];
+                    if (status === 'Present') present++;
+                    else if (status === 'Absent') absent++;
+                    else if (status === 'Leave') leave++;
+                });
+                const total = present + absent + leave;
+                const percentage = total ? (present / total) * 100 : null;
+                return { roll: st.roll, name: st.name, present, absent, leave, total, percentage };
+            });
+            const eligible = rows.filter(row => row.total > 0);
+            const average = eligible.length ? eligible.reduce((sum, row) => sum + row.percentage, 0) / eligible.length : 0;
+            return { rows, dates, average, low: rows.filter(row => row.total > 0 && row.percentage < 75) };
+        }
+
+        function renderMonthlyReport() {
+            const lowBody = document.getElementById('monthly-low-body');
+            const reportBody = document.getElementById('monthly-report-body');
+            if (!lowBody || !reportBody) return;
+
+            const report = getMonthlyAttendanceData();
+            document.getElementById('monthly-days').textContent = report.dates.length;
+            document.getElementById('monthly-low-count').textContent = report.low.length;
+            document.getElementById('monthly-average').textContent = `${report.average.toFixed(1)}%`;
+
+            if (!report.dates.length) {
+                lowBody.innerHTML = '<tr><td colspan="4" class="py-5 px-4 text-center text-slate-400">No saved attendance records found for this month.</td></tr>';
+                reportBody.innerHTML = '<tr><td colspan="7" class="py-5 px-4 text-center text-slate-400">No saved attendance records found for this month.</td></tr>';
+                return;
+            }
+
+            lowBody.innerHTML = report.low.length ? report.low
+                .sort((a, b) => a.percentage - b.percentage)
+                .map(row => `<tr class="bg-rose-50/60 hover:bg-rose-50"><td class="py-3 px-4 font-bold">${row.roll}</td><td class="py-3 px-4 font-semibold">${row.name}</td><td class="py-3 px-4">${row.present} / ${row.total}</td><td class="py-3 px-4 text-right"><span class="inline-flex px-2.5 py-1 rounded-lg bg-rose-100 text-rose-700 font-extrabold">${row.percentage.toFixed(1)}%</span></td></tr>`).join('')
+                : '<tr><td colspan="4" class="py-5 px-4 text-center text-emerald-700 font-semibold">No students are below 75% for this month.</td></tr>';
+
+            reportBody.innerHTML = report.rows.map(row => {
+                const pct = row.total ? row.percentage : null;
+                const lowClass = pct !== null && pct < 75 ? 'text-rose-700 font-extrabold' : 'text-emerald-700 font-bold';
+                return `<tr class="hover:bg-slate-50 ${pct !== null && pct < 75 ? 'bg-rose-50/30' : ''}">
+                    <td class="py-3 px-4 font-bold">${row.roll}</td><td class="py-3 px-4 font-semibold">${row.name}</td>
+                    <td class="py-3 px-4 text-center text-emerald-700">${row.present}</td><td class="py-3 px-4 text-center text-rose-600">${row.absent}</td>
+                    <td class="py-3 px-4 text-center text-amber-600">${row.leave}</td><td class="py-3 px-4 text-center">${row.total}</td>
+                    <td class="py-3 px-4 text-right ${lowClass}">${pct === null ? 'N/A' : `${pct.toFixed(1)}%`}</td></tr>`;
+            }).join('');
+        }
+
+        function downloadMonthlyReport() {
+            const monthValue = document.getElementById('monthly-report-month').value;
+            if (!monthValue) { alert('Please select a month first.'); return; }
+            const report = getMonthlyAttendanceData();
+            if (!report.dates.length) { alert('No saved attendance records are available for the selected month.'); return; }
+
+            const lines = [
+                ['Month', monthValue],
+                ['Recorded Class Days', report.dates.length],
+                [],
+                ['Roll No', 'Student Name', 'Present', 'Absent', 'Leave', 'Total Marked', 'Attendance Percentage', 'Below 75%']
+            ];
+            report.rows.forEach(row => lines.push([row.roll, row.name, row.present, row.absent, row.leave, row.total, row.total ? `${row.percentage.toFixed(1)}%` : 'N/A', row.total && row.percentage < 75 ? 'YES' : 'NO']));
+            const csv = lines.map(line => line.map(value => {
+                const text = String(value ?? '');
+                return `"${text.replace(/"/g, '""')}"`;
+            }).join(',')).join('\r\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `NAMCE_Monthly_Attendance_${monthValue}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
         }
 
         // Dashboard Stats calculation
